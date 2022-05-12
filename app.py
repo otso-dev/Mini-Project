@@ -3,10 +3,10 @@ from pymongo import MongoClient
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 
 # 토큰에 만료시간을 줘야하기 때문에, datetime 모듈도 사용합니다. # 글쓰기 시간창 기능 도 씁니다.
-import datetime
+from datetime import datetime, timedelta
 import requests
 
-client = MongoClient('3.34.178.64', 27017, username="test", password="test")
+client = MongoClient('mongodb+srv://test:sparta@cluster0.7zzzx.mongodb.net/Cluster0?retryWrites=true&w=majority')
 db = client.dbsparta
 
 app = Flask(__name__)
@@ -18,19 +18,23 @@ SECRET_KEY = 'SPARTA'
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
 import jwt
 
-
 # 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 import hashlib
 
-
 @app.route('/')
 def main():
-
     # 성현님 부분 (하나 안함)
-    myname = "정성현"
+    token_receive = request.cookies.get('mytoken')
     borders = list(db.lol_collection.find({}, {"_id": False}))
-    return render_template("main.html", borders=borders, myname=myname)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({"id": payload['id']})
+        return render_template('main.html', borders=borders, nickname=user_info["nick"], id=user_info["id"])
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 
 @app.route('/login')
@@ -65,6 +69,7 @@ def api_join():
 
     return jsonify({'result': 'success'})
 
+
 # [로그인 API] 유정님
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
 
@@ -87,7 +92,7 @@ def api_login():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=20)
+            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
@@ -136,7 +141,17 @@ def api_valid():
 
 @app.route('/write', methods=["GET"])
 def get_write_page():
-    return render_template("write_page.html")
+    # 성현님 부분
+    token_receive = request.cookies.get('mytoken')
+    borders = list(db.lol_collection.find({}, {"_id": False}))
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({"id": payload['id']})
+        return render_template('write_page.html', borders=borders, nickname=user_info["nick"], id=user_info["id"])
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 
 @app.route("/write", methods=["POST"])
@@ -224,16 +239,22 @@ def get_board(id_input):
     duo_date = data['duo_date']
     image_url = db.tier_image.find_one({'tier': tier}, {'_id': False})['image_url']
 
-
     # Jinja 에서는 writer[0], writer[1], writer[2], writer[3]
     # {% set tier = writer[0] %}
     # {% set rating = writer[1] %}
     # {% set content = writer[2] %}
     # {% set duo_date = writer[3] %}
     writer = [tier, rating, content, duo_date, image_url]
-
-    return render_template("board.html", writer=writer)
-
+    token_receive = request.cookies.get('mytoken')
+    borders = list(db.lol_collection.find({}, {"_id": False}))
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.user.find_one({"id": payload['id']})
+        return render_template('board.html', writer=writer, nickname=user_info["nick"], id=user_info["id"])
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

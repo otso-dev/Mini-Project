@@ -31,19 +31,24 @@
 
         .wrap {
             display: flex;
-            justify-content: center;
             flex-direction: column;
-            width: 100%;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            height: 100vh;
             max-width: 500px;
             padding: 0 5%;
         }
 
         .head {
-            margin-top: 25%;
-            margin-bottom: 20px;
+            width: 100%;
         }
 
-        .title {
+        main {
+            width: 100%;
+        }
+
+        .main_title {
             font-size: 40px;
             font-weight: bold;
             color: #0d6efd;
@@ -54,6 +59,7 @@
         }
 
         .login {
+            width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -102,7 +108,7 @@
 <body>
 <div class="wrap">
     <header class="head">
-        <h1 class="title">듀오구함</h1>
+        <h1 class="main_title">듀오구함</h1>
         <p class="sub_title">로그인을 해주세요.</p>
     </header>
     <main>
@@ -123,7 +129,6 @@
             </div>
         </section>
     </main>
-    <footer></footer>
 </div>
 
 </body>
