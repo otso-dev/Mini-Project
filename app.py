@@ -77,7 +77,7 @@ def api_join():
 def api_login():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
-
+    # 주석
     # 회원가입 때와 같은 방법으로 pw를 암호화합니다.
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
