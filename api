@@ -21,3 +21,4 @@
 - api를 호출할 때 입력된 비밀번호를 비교하여 동일할 때만 글이 삭제되게 하기
 - request = URL:/articles:Name_Id/delete, param : name_Id  body : password : Number
 - response = 삭제
+git commit
