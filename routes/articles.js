@@ -27,7 +27,7 @@ router.post("/articles",async (req,res)=>{
     const {title,names,comment,password} = req.body;
     const count = await Count.find({countstring});
     
-    if(!count.length){
+    if(count.length){
         await Count.updateOne({countstring: "count"},{$inc : {count: 1}});
     }else{
         await Count.inserOne({countstring: "count"},{count : 0});
