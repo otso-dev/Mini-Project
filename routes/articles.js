@@ -25,12 +25,12 @@ router.get("/articles:Name_Id",async (req,res)=>{
 router.post("/articles",async (req,res)=>{
     const today = new Date();
     const {title,names,comment,password} = req.body;
-    const count = await Count.find({countstring});
+    const count = await Count.find({});
     
     if(count.length){
         await Count.updateOne({countstring: "count"},{$inc : {count: 1}});
     }else{
-        await Count.inserOne({countstring: "count"},{count : 0});
+        await Count.create({countstring: "count", count : 0});
     }
    
     
