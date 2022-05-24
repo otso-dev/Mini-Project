@@ -12,8 +12,8 @@
 - response = payload
 ## 게시글 조회 API (method = GET)
 - 제목, 작성자명, 작성 내용을 조회하기
-- request = URL:/articles:Name_Id
-- response = title : string, name : string, comment : string Name_Id : Number
+- request = URL:/articles:Name_Id param : Name_Id : Number
+- response = title : string, name : string, comment : string 
 ## 게시글 수정 API (method = PUT)
 - api를 호출할 때 입력된 비밀번호를 비교하여 동일할 때만 글이 수정되게 하기
 - request = URL:/articles:Name_Id/modify,  param : name_Id body : password : Number
