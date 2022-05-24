@@ -6,7 +6,7 @@
 
 게시글 작성 API (method = POST)
 - 제목, 작성자명, 비밀번호, 작성 내용을 입력하기
-- request = URL:/articles/write
+- request = URL:/articles
   body =  title : string , name : string, password : Number, comment : string, Name_Id : Number, date : Number
 - response = Name_Id : Number 
 게시글 조회 API (method = GET)
