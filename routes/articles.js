@@ -25,7 +25,14 @@ router.get("/articles:Name_Id",async (req,res)=>{
 router.post("/articles",async (req,res)=>{
     const today = new Date();
     const {title,names,comment,password} = req.body;
-    await Count.updateOne({countstring: "count"},{$inc : {count: 1}});
+    const count = await Count.find({countstring});
+    
+    if(!count.length){
+        await Count.updateOne({countstring: "count"},{$inc : {count: 1}});
+    }else{
+        await Count.inserOne({countstring: "count"},{count : 0});
+    }
+   
     
     const Id = (await Count.find({ countstring: 'count' }))[0].count
     await Articles.create({title,names,comment,today,password,Name_Id : Id, date : today});
