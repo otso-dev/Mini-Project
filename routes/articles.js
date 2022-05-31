@@ -12,7 +12,7 @@ router.get("/",async (req,res)=>{
     res.json({articles_list});
 });
 
-router.get("/articles/:user_Id",authMiddlewares, async (req,res)=>{
+router.get("/articles/:user_Id", async (req,res)=>{
     const user = res.locals;
     const{user_Id} = req.params;
     const articles = await Articles.find({NickName : user_Id },{title :1,comment : 1,date : 1});
