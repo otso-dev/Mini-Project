@@ -9,12 +9,13 @@
 - response = 조회한 뒤 상황에 맞게 메세지 보냄
 
 댓글 목록 조회 API(method = GET) => 로그인을 안해도 조회 가능
-- request = URL:/articles/:user_Id 
+- request = URL:/articles/:user_Id/comment
+- response = payload comment : string
 
 전체 게시글 목록 조회 API(method = GET) => 로그인을 안해도 조회 가능
 - 제목, 작성자명, 작성 날짜를 조회하기
 - 작성날짜를 기준으로 내림차순 정렬하기
-- request = URL:/articles 
+- request = URL:/ 
 - response = title : string, nickname : string, date : string
 
 게시글 조회 API (method = GET) => 로그인을 안해도 조회가능
@@ -26,7 +27,7 @@
 게시글 작성 API (method = POST) => 로그인을 해야 작성가능
 - 제목, 작성 내용을 입력하기
 - request = URL:/articles
-  body =  title : string , comment : string, date : Number
+  body =  title : string , comment : string, date : Number ,user_Id : string
 - response = payload
 
 게시글 수정 API (method = PUT)
@@ -37,7 +38,25 @@
 
 게시글 삭제 API (method = DELETE) 
 - 로그인을 하고 해당 작성자만 삭제가능
-- request = URL:/articles:user_Id/delete,
+- request = URL:/articles/:user_Id/delete,
   param : user_Id
+- response = 삭제
+
+댓글 작성 API (method = POST)
+로그인을 해야 작성 가능, 댓글내용이 비워져 있으면 입력해주세요 메세지 보내기
+- request = URL:/articles/:user_Id/comment
+- param = : user_Id body : comment : string
+- response =  : payload, comment : string , date : date
+
+댓글 수정 API (method = PATCH)
+로그인을 해야 수정가능, 로그인 토큰 해당하는 사용자가 작성한 댓글만 수정가능하도록 하기
+- request = URL:/articles/:user_Id/comment/modify
+  param = user_Id, comment : string
+- response = 
+
+댓글 삭제 API (method = DELETE)
+해당 작성자만 삭제가능
+- request = URL:/articles/:user_Id/comment/delete
+param : user_Id
 - response = 삭제
 git commit

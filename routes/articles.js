@@ -1,75 +1,65 @@
 const express = require("express");
-const articles = require("../schemas/articles");
 const router = express.Router();
 const Articles = require("../schemas/articles");
-const Count = require("../schemas/count");
+const User = require("../schemas/user");
+const Comment = require("../schemas/comment");
+const authMiddlewares = require("../auth_middleware/auth_middleware");
 
-router.get("/",(req,res)=>{
-    res.send("this root page");
-});
 
-router.get("/articles",async (req,res)=>{
+router.get("/",async (req,res)=>{
    // res.send("전체 게시글 조회 페이지");
-    const articles_list = await Articles.find({},{title : 1, names : 1, date : 1}).sort({date: -1});
+    const articles_list = await Articles.find({},{title : 1, comment : 1, date : 1}).sort({date: -1});
     res.json({articles_list});
-   
 });
 
-router.get("/articles:Name_Id",async (req,res)=>{
-    const{Name_Id} = req.params;
-    const articles = await Articles.find({Name_Id : Number(Name_Id)},{title :1,names:1,comment : 1,date : 1});
-
-    res.json({articles});
+router.get("/articles/:user_Id",authMiddlewares, async (req,res)=>{
+    const user = res.locals;
+    const{user_Id} = req.params;
+    const articles = await Articles.find({NickName : user_Id },{title :1,comment : 1,date : 1});
+    const comment = await Comment.find({articles_Nickname: user_Id},{comment:1}).sort({date: -1});
+   res.json({articles, comment});
 });
 
-router.post("/articles",async (req,res)=>{
+router.post("/articles",authMiddlewares, async (req,res)=>{
     const today = new Date();
-    const {title,names,comment,password} = req.body;
-    const count = await Count.find({});
-    
-    if(count.length){
-        await Count.updateOne({countstring: "count"},{$inc : {count: 1}});
-    }else{
-        await Count.create({countstring: "count", count : 0});
-    }
-   
-    
-    const Id = (await Count.find({ countstring: 'count' }))[0].count
-    await Articles.create({title,names,comment,today,password,Name_Id : Id, date : today});
+    const {user} = res.locals;
+    console.log({user});
+    const {title,comment,password} = req.body;
+    await Articles.create({title,comment,password,NickName : user.nickname, date : today});
     
     res.json({success: true});
 });
 
-router.put("/articles:Name_Id/modify",async (req,res)=>{
-    const {Name_Id} = req.params;
+router.put("/articles/:user_Id/modify",authMiddlewares ,async (req,res)=>{
+    const {user_Id} = req.params;
     const {password} = req.body;
-    const pass = await Articles.findOne({Name_Id : Number(Name_Id)});
+    const pass = await Articles.findOne({NickName : user_Id});
     
     if(pass['password'] != password)
     {
         return res.status(400).json({success:false, errorMessage: " 비밀번호가 틀렸습니다."});
     }else{
-        const {title,names,comment} = req.body;
-        await Articles.updateOne({Name_Id,password},{title,names,comment});
-        const articles = await Articles.find({Name_Id : Number(Name_Id)});
+        const {title,comment} = req.body;
+        await Articles.updateOne({user_Id,password},{title,comment});
+        const articles = await Articles.find({NickName : user_Id});
         res.json({articles})
     }
     
    
 });
 
-router.delete("/articles:Name_Id/delete",async (req,res)=>{
-    const {Name_Id} = req.params;
+router.delete("/articles/:user_Id/delete",authMiddlewares,async (req,res)=>{
+    const {user_Id} = req.params;
     const {password} = req.body;
 
-    const pass = await Articles.findOne({Name_Id : Number(Name_Id)});
+    const pass = await Articles.findOne({NickName : user_Id});
 
     if(pass['password'] != password)
     {
        return res.status(400).json({success:false, errorMessage: " 비밀번호가 틀렸습니다."});
     }else
     {
-        await Articles.deleteOne({Name_Id,password});
+        await Articles.deleteOne({NickName,password});
         res.json({success:true});
     }
 });

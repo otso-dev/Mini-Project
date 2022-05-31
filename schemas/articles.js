@@ -1,11 +1,8 @@
+const { string } = require("joi");
 const mongoose = require("mongoose");
-
+const User = require("./user")
 const articlesSchema = mongoose.Schema({
         title: {
-            type : String,
-            required: true,
-        },
-        names:{
             type : String,
             required: true,
         },
@@ -14,19 +11,18 @@ const articlesSchema = mongoose.Schema({
             required: true,
         },
         date:{
-            type : String,
+            type : Date,
             required: true,
             unique: true,
         },
-        password: {
+        password:{
             type : Number,
-            required: true,
+            require : true,
         },
-        Name_Id:{
-            type : Number,
-            required :true,
-            unique:true,
+        NickName: {
+            type : String,
+            unique : true,
         },
-        
-});
+});     
+
 module.exports = mongoose.model("articles",articlesSchema);
