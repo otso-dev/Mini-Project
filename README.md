@@ -50,8 +50,9 @@
 ## 댓글 수정 API (method = PATCH)
 로그인을 해야 수정가능, 로그인 토큰 해당하는 사용자가 작성한 댓글만 수정가능하도록 하기
 - request = URL:/articles/:user_Id/comment/modify
-  param = user_Id, comment : string
-- response = 
+  param = user_Id
+  body = comment : string
+- response = comment : string
 
 ## 댓글 삭제 API (method = DELETE)
 해당 작성자만 삭제가능
