@@ -19,7 +19,6 @@ router.get("/articles/:user_Id", async (req,res)=>{
     const comment = await Comment.find({articles_Nickname: user_Id},{comment:1}).sort({date: -1});
    res.json({articles, comment});
 });
-
 router.post("/articles",authMiddlewares, async (req,res)=>{
     const today = new Date();
     const {user} = res.locals;
