@@ -2,6 +2,11 @@ package VIew;
 
 import java.awt.CardLayout;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -10,8 +15,10 @@ import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
+import java.util.Map;
 
-import javax.print.attribute.standard.OutputDeviceAssigned;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -24,13 +31,18 @@ import javax.swing.JTextField;
 import com.google.gson.Gson;
 
 import dto.request.RequestDto;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import lombok.Getter;
+import lombok.Setter;
 
+
+@Getter
 public class ClientApplication extends JFrame {
 
 	private static final long serialVersionUID = -8217532290504057348L;
-
+	private static ClientApplication instance;
+	
+	
+	
 	private Gson gson;
 	private Socket socket;
 
@@ -40,7 +52,21 @@ public class ClientApplication extends JFrame {
 	private JTextField usernameField;
 
 	private JTextField sendMessageField;
+	
+	@Setter
+	private List<Map<String, String>> roomInfoList;
+	private DefaultListModel<String> roomNameListModel;
+	private DefaultListModel<String> usernameListModel;
 
+	public static ClientApplication getInstance() {
+		
+		if(instance == null) {
+			instance = new ClientApplication();
+		}
+		return instance;
+	}
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -48,7 +74,7 @@ public class ClientApplication extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ClientApplication frame = new ClientApplication();
+					ClientApplication frame = ClientApplication.getInstance();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -60,7 +86,7 @@ public class ClientApplication extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ClientApplication() {
+	private ClientApplication() {
 
 		/* =======<< Init >>====== */
 		gson = new Gson();
@@ -92,16 +118,17 @@ public class ClientApplication extends JFrame {
 		JPanel roomPanel = new JPanel();
 
 		/* =======<< LayOut >>====== */
-
+		MainCard = new CardLayout();
+		
+		MainPanel.setLayout(MainCard);
 		loginPanel.setLayout(null);
 		roomListPanel.setLayout(null);
 		roomPanel.setLayout(null);
-		MainPanel.setLayout(MainCard);
+		
 
 		/* =======<< PanelSet >>====== */
 
 		setContentPane(MainPanel);
-		MainPanel.setLayout(new CardLayout(0, 0));
 		MainPanel.add(loginPanel, "loginPanel");
 		MainPanel.add(roomListPanel, "roomListPanel");
 		MainPanel.add(roomPanel, "roomPanel");
@@ -110,29 +137,42 @@ public class ClientApplication extends JFrame {
 
 		JButton loginButton = new JButton("접속하기");
 		usernameField = new JTextField();
+		usernameField.requestFocus();
 		usernameField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					System.out.println("엔터 누름");
-					loginButton.doClick(100);
-				}
-			}
+		    @Override
+		    public void keyPressed(KeyEvent e) {
+		        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+		            System.out.println("Enter 키 누름");
+		            Toolkit.getDefaultToolkit().beep();
+		            loginButton.doClick(); // 버튼 클릭
+		        }
+		    }
 		});
+		// usernameField에 포커스를 설정해줍니다.
+		
 
 		usernameField.setBounds(161, 278, 116, 21);
 		loginPanel.add(usernameField);
 		usernameField.setColumns(10);
-
-		loginButton.addMouseListener(new MouseAdapter() {
+		
+		loginButton.addActionListener(new ActionListener() {
+			
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.out.println("클릭함");
-				RequestDto<String> usernameCheckReqDto = new RequestDto<String>("usernameCheck",
-						usernameField.getText());
-				sendRequest(usernameCheckReqDto);
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("로그인 버튼 클릭됨");
+		        RequestDto<String> usernameCheckReqDto = new RequestDto<String>("usernameCheck", usernameField.getText());
+		        sendRequest(usernameCheckReqDto);
 			}
 		});
+		
+//		loginButton.addMouseListener(new MouseAdapter() {
+//		    @Override
+//		    public void mouseClicked(MouseEvent e) {
+//		        System.out.println("로그인 버튼 클릭됨");
+//		        RequestDto<String> usernameCheckReqDto = new RequestDto<String>("usernameCheck", usernameField.getText());
+//		        sendRequest(usernameCheckReqDto);
+//		    }
+//		});
 		loginButton.setBounds(172, 319, 97, 23);
 		loginPanel.add(loginButton);
 
@@ -141,21 +181,53 @@ public class ClientApplication extends JFrame {
 		JScrollPane roomListScropanel = new JScrollPane();
 		roomListScropanel.setBounds(133, 10, 321, 631);
 		roomListPanel.add(roomListScropanel);
-
-		JList roomList = new JList();
+		
+		roomNameListModel = new DefaultListModel<>();
+		JList roomList = new JList(roomNameListModel);
+		roomList.addMouseListener(new MouseAdapter() {
+		
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2) {
+					int selectedIndex = roomList.getSelectedIndex();
+					
+					RequestDto<Map<String,String>> requestDto = new RequestDto<Map<String,String>>("enterRoom", roomInfoList.get(selectedIndex));
+					sendRequest(requestDto);
+				}
+			}
+		});
 		roomListScropanel.setViewportView(roomList);
 
 		JButton roomCreateButton = new JButton("방생성");
+		roomCreateButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String roomName = null;
+				while(true) {
+					roomName = JOptionPane.showInputDialog(null,"생성할 방의 제목을 입력하세요","방 생성",JOptionPane.PLAIN_MESSAGE);
+					if(!roomName.isBlank()) {
+						break;
+					}
+					JOptionPane.showMessageDialog(null, "공백은 사용 할 수 없습니다.","방생성 오류",JOptionPane.ERROR_MESSAGE);
+				}
+				RequestDto<String> requestDto = new RequestDto<String>("createRoom", roomName);
+				sendRequest(requestDto);
+			}
+		});
+		
 		roomCreateButton.setBounds(12, 24, 97, 52);
 		roomListPanel.add(roomCreateButton);
 
 		/* =======<< room Panel >>====== */
-
+		
+	
 		JScrollPane JoinUserScroll = new JScrollPane();
 		JoinUserScroll.setBounds(0, 10, 327, 70);
 		roomPanel.add(JoinUserScroll);
-
-		JList userList = new JList();
+		
+		
+		usernameListModel = new DefaultListModel<String>();
+		JList userList = new JList(usernameListModel);
 		JoinUserScroll.setViewportView(userList);
 
 		JButton roomExitButton = new JButton("방 나가기");
