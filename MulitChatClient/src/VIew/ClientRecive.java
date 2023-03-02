@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 import com.google.gson.Gson;
 
+import dto.request.RequestDto;
 import dto.response.ResponseDto;
 
 public class ClientRecive extends Thread {
@@ -54,7 +55,7 @@ public class ClientRecive extends Thread {
 					"roomListPanel");
 			break;
 		case"refreshRoomList":
-			System.out.println(responseDto.getBody().getClass());
+			//System.out.println(responseDto.getBody().getClass());
 			refreshRoomList((List<Map<String,String>>)responseDto.getBody());
 			break;
 			
@@ -63,8 +64,21 @@ public class ClientRecive extends Thread {
 					"roomPanel");
 			break;
 			
-		case "refreshUserList":
+		case "refreshUsernameList":
 			refreshUsernameList((List<String>)responseDto.getBody());
+			break;
+			
+		case "enterRoomSuccessfully":
+			ClientApplication.getInstance().getMainCard().show(ClientApplication.getInstance().getMainPanel(),
+					"roomPanel");
+			break;
+		case "receiveMessage":
+			ClientApplication.getInstance().getChattingContent().append((String)responseDto.getBody()+"\n");
+			break;
+			
+		case "exitRoom":
+			ClientApplication.getInstance().getChattingContent().setText("");
+			ClientApplication.getInstance().getMainCard().show(ClientApplication.getInstance().getMainPanel(), "roomListPanel");
 			break;
 		default:
 			break;
@@ -78,12 +92,13 @@ public class ClientRecive extends Thread {
 		for(Map<String,String> roominfo : roomList) {
 			ClientApplication.getInstance().getRoomNameListModel().addElement(roominfo.get("roomName"));
 		}
-		
+		ClientApplication.getInstance().getRoomList().setSelectedIndex(0);
 	}
 	
 	private void refreshUsernameList(List<String>usernameList) {
 		ClientApplication.getInstance().getUsernameListModel().clear();
 		ClientApplication.getInstance().getUsernameListModel().addAll(usernameList);
+		ClientApplication.getInstance().getUserList().setSelectedIndex(0);
 	}
 
 }
