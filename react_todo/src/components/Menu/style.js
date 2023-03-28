@@ -9,13 +9,14 @@ export const style = css`
   height: 100%;
 
   background-color: #dbdbdb;
+  display: none;
 `;
 
 export const MenuButton = css`
   position: absolute;
   transform: translateY(-50%);
   top: 50%;
-  right: -13px;
+  right: -10px;
 
   display: flex;
   justify-content: center;

@@ -5,7 +5,6 @@ export const reset = css`
    v2.0 | 20110126
    License: none (public domain)
 */
-
   html,
   body,
   div,
@@ -93,7 +92,11 @@ export const reset = css`
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
+    box-sizing: border-box;
+    color: #1d1d1f;
+    font-size: 14px;
   }
+
   /* HTML5 display-role reset for older browsers */
   article,
   aside,
@@ -114,6 +117,7 @@ export const reset = css`
   ol,
   ul {
     list-style: none;
+    list-style-type: none;
   }
   blockquote,
   q {
