@@ -8,7 +8,7 @@ export const style = css`
   width: 300px;
   height: 100%;
   transition: left 1s ease;
-  background-color: #dbdbdb;
+  background-color: #454545;
 `;
 
 export const CloseStyle = css`
@@ -19,7 +19,11 @@ export const CloseStyle = css`
   width: 300px;
   height: 100%;
   transition: left 1s ease;
-  background-color: #dbdbdb;
+  background-color: #454545;
+`;
+
+export const side = css`
+  background-color: #454545;
 `;
 
 export const MenuButton = css`
@@ -43,4 +47,9 @@ export const MenuButton = css`
   color: #ffa100;
   background-color: #454545;
   cursor: pointer;
+
+  &:hover {
+    background-color: #454545;
+    text-shadow: 0px 0px 5px #ffa100;
+  }
 `;

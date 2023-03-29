@@ -48,17 +48,13 @@ export const ModalFooter = css`
   padding: 0px 10px;
   height: 20%;
 `;
-export const ModalOkButton = css`
+export const ModalButton = css`
   border: 1px solid #dbdbdb;
   padding: 5px 10px;
   background-color: #fff;
   font-weight: 600;
   cursor: pointer;
-`;
-export const ModalCancelButton = css`
-  border: 1px solid #dbdbdb;
-  padding: 5px 10px;
-  background-color: #fff;
-  font-weight: 600;
-  cursor: pointer;
+  &:hover {
+    background-color: #dbdbdb;
+  }
 `;

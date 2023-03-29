@@ -8,7 +8,7 @@ const TodoHeader = ({ onChange, onKeyUp, input, onAdd }) => {
     <header css={S.MainHeader}>
       <h1 css={S.MainTitle}>ToDo</h1>
       <div css={S.InputContainer}>
-        <Icon name="calendar" />
+        <Icon css={S.Icon} name="calendar" />
         <input
           css={S.InputTodo}
           type="text"

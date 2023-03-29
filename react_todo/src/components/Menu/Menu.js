@@ -19,61 +19,32 @@ const Menu = () => {
   };
   return (
     <>
-      {isOpen ? (
-        <aside css={S.style}>
-          <Navigation
-            activeItemId="/"
-            onSelect={({ itemId }) => {
-              navigate(itemId);
-            }}
-            items={[
-              {
-                title: "TODOLIST",
-                itemId: "/",
-                elemBefore: () => <Icon name="settings" />,
-              },
-              {
-                title: "UserInfomation",
-                itemId: "/UserInfomation",
-                elemBefore: () => <Icon name="user" />,
-              },
-              {
-                title: "TODOLIST",
-                itemId: "/TodoList",
-                elemBefore: () => <Icon name="check" />,
-              },
-            ]}
-          />
-          <MenuButton isOpen={isOpen} MenuClick={MenuClick} />
-        </aside>
-      ) : (
-        <aside css={S.CloseStyle}>
-          <Navigation
-            activeItemId="/"
-            onSelect={({ itemId }) => {
-              navigate(itemId);
-            }}
-            items={[
-              {
-                title: "TODOLIST",
-                itemId: "/",
-                elemBefore: () => <Icon name="settings" />,
-              },
-              {
-                title: "UserInfomation",
-                itemId: "/UserInfomation",
-                elemBefore: () => <Icon name="user" />,
-              },
-              {
-                title: "TODOLIST",
-                itemId: "/TodoList",
-                elemBefore: () => <Icon name="check" />,
-              },
-            ]}
-          />
-          <MenuButton isOpen={isOpen} MenuClick={MenuClick} />
-        </aside>
-      )}
+      <aside css={isOpen ? S.style : S.CloseStyle}>
+        <Navigation
+          activeItemId="/"
+          onSelect={({ itemId }) => {
+            navigate(itemId);
+          }}
+          items={[
+            {
+              title: "TODOLIST",
+              itemId: "/",
+              elemBefore: () => <Icon name="settings" />,
+            },
+            {
+              title: "UserInfomation",
+              itemId: "/",
+              elemBefore: () => <Icon name="user" />,
+            },
+            {
+              title: "TODOLIST",
+              itemId: "/",
+              elemBefore: () => <Icon name="check" />,
+            },
+          ]}
+        />
+        <MenuButton isOpen={isOpen} MenuClick={MenuClick} />
+      </aside>
     </>
   );
 };

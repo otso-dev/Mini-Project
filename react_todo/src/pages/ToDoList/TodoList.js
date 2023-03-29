@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import Icon from "awesome-react-icons/lib/cjs/Icon";
 import React from "react";
 import { useRef } from "react";
 import { useState } from "react";
 import * as S from "./style";
-import PromptModal from "./../../components/TodoList/Modal/PromptModal/PromptModal";
-import RemoveModal from "../../components/TodoList/Modal/RemoveModal/RemoveModal";
 import Menu from "../../components/Menu/Menu";
 import TodoHeader from "../../components/TodoHeader/TodoHeader";
+import PromptModal from "./../../components/Modal/PromptModal/PromptModal";
+import RemoveModal from "./../../components/Modal/RemoveModal/RemoveModal";
+import TodoContent from "../../components/TodoContent/TodoContent";
+import { useEffect } from "react";
 const TodoList = () => {
   let today = new Date();
   const year = today.getFullYear();
@@ -42,7 +43,10 @@ const TodoList = () => {
     RemoveFalg: false,
   });
 
-  const [todoList, setTodoList] = useState([]);
+  const [todoList, setTodoList] = useState(() => {
+    const saveTodo = localStorage.getItem("todoList");
+    return saveTodo ? JSON.parse(localStorage.getItem("todoList")) : [];
+  });
 
   const [isModifyOpen, setIsModifyOpen] = useState(false);
   const [isRemoveOpen, setIsRemoveOpen] = useState(false);
@@ -52,6 +56,25 @@ const TodoList = () => {
     content: "",
     date: `${year}.${month}.${day}(${convertDay(today.getDay())})`,
     time: `${hours}:${minutes}:${seconds}`,
+  });
+
+  useEffect(() => {
+    const saveTodo = JSON.parse(localStorage.getItem("todoList"));
+    if (saveTodo) {
+      setTodoList(saveTodo);
+    }
+    const saveTodoId = JSON.parse(localStorage.getItem("todoId"));
+    if (saveTodo) {
+      todoId.current = saveTodoId;
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("todoList", JSON.stringify(todoList));
+  });
+
+  useEffect(() => {
+    localStorage.setItem("todoId", JSON.stringify(todoId.current));
   });
 
   const onChange = (e) => {
@@ -119,21 +142,11 @@ const TodoList = () => {
           <ul css={S.TodoContentList}>
             {todoList.map((todo) => {
               return (
-                <li css={S.TodoContent}>
-                  <div css={S.TodoContentHeader}>
-                    <div css={S.TodoDate}>{todo.date}</div>
-                    <div css={S.TodoDateTime}>{todo.time}</div>
-                  </div>
-                  <div css={S.TodoContentMain}>{todo.content}</div>
-                  <div css={S.TodoContentFooter}>
-                    <button css={S.ModifyButton} onClick={() => openModifyModal(todo.id)}>
-                      <Icon name="edit-pencil-simple" />
-                    </button>
-                    <button css={S.RemoveButton} onClick={() => openRemoveModal(todo.id)}>
-                      <Icon name="trash" />
-                    </button>
-                  </div>
-                </li>
+                <TodoContent
+                  todo={todo}
+                  openModifyModal={openModifyModal}
+                  openRemoveModal={openRemoveModal}
+                />
               );
             })}
           </ul>

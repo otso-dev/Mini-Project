@@ -48,10 +48,10 @@ const PromptModal = (props) => {
           />
         </div>
         <div css={S.ModalFooter}>
-          <button css={S.ModalOkButton} onClick={onSubmit}>
+          <button css={S.ModalButton} onClick={onSubmit}>
             확인
           </button>
-          <button css={S.ModalCancelButton} onClick={closeModal}>
+          <button css={S.ModalButton} onClick={closeModal}>
             취소
           </button>
         </div>

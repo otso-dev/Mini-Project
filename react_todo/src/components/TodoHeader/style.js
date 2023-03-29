@@ -26,7 +26,7 @@ export const InputContainer = css`
 export const InputTodo = css`
   border: none;
   outline: none;
-  padding: 0 70px;
+  padding: 0 60px;
   width: 100%;
   height: 100%;
 
@@ -48,7 +48,12 @@ export const AddButton = css`
   height: 100%;
   cursor: pointer;
   background-color: #fff;
-  & :hover {
+  &:hover {
     background-color: #dbdbdb;
   }
+`;
+
+export const Icon = css`
+  font-size: 20px;
+  margin: 8px;
 `;
