@@ -6,6 +6,8 @@ import { useState } from "react";
 import * as S from "./style";
 import PromptModal from "./../../components/TodoList/Modal/PromptModal/PromptModal";
 import RemoveModal from "../../components/TodoList/Modal/RemoveModal/RemoveModal";
+import Menu from "../../components/Menu/Menu";
+import TodoHeader from "../../components/TodoHeader/TodoHeader";
 const TodoList = () => {
   let today = new Date();
   const year = today.getFullYear();
@@ -70,6 +72,10 @@ const TodoList = () => {
       ...input,
       id: todoId.current++,
     };
+    if (todo.content === "") {
+      alert("Plase Todo Add...");
+      return;
+    }
     setTodoList([...todoList, todo]);
     setInput({ ...input, content: "" });
   };
@@ -83,11 +89,11 @@ const TodoList = () => {
     );
   };
 
-  const onModify = (id) => {
+  const onModify = (moidfyTodo) => {
     setTodoList(
       todoList.map((todo) => {
-        if (todo.id === id) {
-          todo.content = id.content;
+        if (todo.id === moidfyTodo.id) {
+          todo.content = moidfyTodo.content;
         }
         return todo;
       })
@@ -95,9 +101,7 @@ const TodoList = () => {
   };
 
   const openModifyModal = (id) => {
-    console.log(id);
     setModifyTodo(todoList.filter((todo) => todo.id === id)[0]);
-    console.log(modifyTodo);
     setIsModifyOpen(true);
   };
 
@@ -109,24 +113,9 @@ const TodoList = () => {
   return (
     <>
       <div css={S.container}>
+        <Menu />
         <main css={S.MainContainer}>
-          <header css={S.MainHeader}>
-            <h1 css={S.MainTitle}>ToDo</h1>
-            <div css={S.InputContainer}>
-              <Icon name="calendar" />
-              <input
-                css={S.InputTodo}
-                type="text"
-                placeholder="Plase Enter Todo..."
-                onChange={onChange}
-                onKeyUp={onKeyUp}
-                value={input.content}
-              />
-              <button css={S.AddButton} onClick={onAdd}>
-                <Icon name="plus" />
-              </button>
-            </div>
-          </header>
+          <TodoHeader onChange={onChange} onKeyUp={onKeyUp} input={input} onAdd={onAdd} />
           <ul css={S.TodoContentList}>
             {todoList.map((todo) => {
               return (

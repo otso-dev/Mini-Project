@@ -14,12 +14,11 @@ const PromptModal = (props) => {
   };
 
   const onSubmit = () => {
-    console.log(props);
+    console.log(props.todo.id);
     props.onModify({
       id: props.todo.id,
       content: modalContent,
     });
-    console.log(modalContent);
     closeModal();
   };
 
@@ -32,7 +31,7 @@ const PromptModal = (props) => {
     <div css={S.ModalContainer}>
       <div css={S.ModalSection}>
         <div css={S.ModalHeader}>
-          <h1 css={S.ModalTitle}>Todo 삭제</h1>
+          <h1 css={S.ModalTitle}>Todo 수정</h1>
         </div>
         <div css={S.ModalMain}>
           <p css={S.ModalMessage}>
@@ -42,9 +41,10 @@ const PromptModal = (props) => {
           <input
             css={S.ModalInput}
             type="text"
+            placeholder="Plase Enter Todo..."
             onChange={contentChange}
             onKeyUp={onSubmitKeyUp}
-            defaultValue={props.todo.content}
+            defaultValue={null}
           />
         </div>
         <div css={S.ModalFooter}>

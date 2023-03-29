@@ -28,6 +28,7 @@ export const ModalHeader = css`
 export const ModalTitle = css`
   margin: 0;
   padding: 0;
+  font-weight: 600;
 `;
 export const ModalMain = css`
   display: flex;

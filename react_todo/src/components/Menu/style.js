@@ -1,22 +1,32 @@
 import { css } from "@emotion/react";
 
 export const style = css`
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: 99;
   width: 300px;
   height: 100%;
-
+  transition: left 1s ease;
   background-color: #dbdbdb;
-  display: none;
+`;
+
+export const CloseStyle = css`
+  position: absolute;
+  top: 0;
+  left: -300px;
+  z-index: 99;
+  width: 300px;
+  height: 100%;
+  transition: left 1s ease;
+  background-color: #dbdbdb;
 `;
 
 export const MenuButton = css`
   position: absolute;
   transform: translateY(-50%);
   top: 50%;
-  right: -10px;
+  right: -13px;
 
   display: flex;
   justify-content: center;
