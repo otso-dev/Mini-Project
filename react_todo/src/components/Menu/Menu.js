@@ -5,7 +5,7 @@ import "react-minimal-side-navigation/lib/ReactMinimalSideNavigation.css";
 import { Navigation } from "react-minimal-side-navigation/lib";
 import { useNavigate } from "react-router-dom";
 import * as S from "./style";
-import MenuButton from "./MenuButton";
+import MenuButton from "./MenuButton/MenuButton";
 import { useState } from "react";
 
 const Menu = () => {

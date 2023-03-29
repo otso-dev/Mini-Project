@@ -3,7 +3,6 @@ import React from "react";
 import { useRef } from "react";
 import { useState } from "react";
 import * as S from "./style";
-import Menu from "../../components/Menu/Menu";
 import TodoHeader from "../../components/TodoHeader/TodoHeader";
 import PromptModal from "./../../components/Modal/PromptModal/PromptModal";
 import RemoveModal from "./../../components/Modal/RemoveModal/RemoveModal";
@@ -135,23 +134,20 @@ const TodoList = () => {
 
   return (
     <>
-      <div css={S.container}>
-        <Menu />
-        <main css={S.MainContainer}>
-          <TodoHeader onChange={onChange} onKeyUp={onKeyUp} input={input} onAdd={onAdd} />
-          <ul css={S.TodoContentList}>
-            {todoList.map((todo) => {
-              return (
-                <TodoContent
-                  todo={todo}
-                  openModifyModal={openModifyModal}
-                  openRemoveModal={openRemoveModal}
-                />
-              );
-            })}
-          </ul>
-        </main>
-      </div>
+      <main css={S.MainContainer}>
+        <TodoHeader onChange={onChange} onKeyUp={onKeyUp} input={input} onAdd={onAdd} />
+        <ul css={S.TodoContentList}>
+          {todoList.map((todo) => {
+            return (
+              <TodoContent
+                todo={todo}
+                openModifyModal={openModifyModal}
+                openRemoveModal={openRemoveModal}
+              />
+            );
+          })}
+        </ul>
+      </main>
       {isModifyOpen ? (
         <PromptModal todo={modifyTodo} setIsModifyOpen={setIsModifyOpen} onModify={onModify} />
       ) : (

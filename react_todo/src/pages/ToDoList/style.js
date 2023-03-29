@@ -6,16 +6,6 @@ export const MainContainer = css`
   height: 100%;
 `;
 
-export const container = css`
-  position: relative;
-  margin: 50px auto;
-  border: 2px solid #dbdbdb;
-  width: 600px;
-  height: 800px;
-  background-color: #fff;
-  overflow: hidden;
-`;
-
 export const TodoContentList = css`
   display: flex;
   flex-wrap: wrap;

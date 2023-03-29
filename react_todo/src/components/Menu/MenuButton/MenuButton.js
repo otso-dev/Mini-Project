@@ -1,4 +1,4 @@
-import * as S from "./style";
+import * as S from "../style";
 /** @jsxImportSource @emotion/react */
 import React from "react";
 const MenuButton = ({ isOpen, MenuClick }) => {
