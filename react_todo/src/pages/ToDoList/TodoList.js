@@ -9,6 +9,7 @@ import RemoveModal from "./../../components/Modal/RemoveModal/RemoveModal";
 import TodoContent from "../../components/TodoContent/TodoContent";
 // import { motion } from "framer-motion";
 import { useEffect } from "react";
+import { motion } from "framer-motion";
 const TodoList = () => {
   let today = new Date();
   const year = today.getFullYear();
@@ -135,42 +136,50 @@ const TodoList = () => {
 
   return (
     <>
-      <main css={S.MainContainer}>
-        <TodoHeader onChange={onChange} onKeyUp={onKeyUp} input={input} onAdd={onAdd} />
-        <ul css={S.TodoContentList}>
-          {todoList.map((todo) => {
-            return (
-              <TodoContent
-                todo={todo}
-                openModifyModal={openModifyModal}
-                openRemoveModal={openRemoveModal}
-                key={todo.id}
-              />
-            );
-          })}
-        </ul>
-      </main>
-      {isModifyOpen ? (
-        <PromptModal
-          todo={modifyTodo}
-          setIsModifyOpen={setIsModifyOpen}
-          onModify={onModify}
-          key="promptModal"
-        />
-      ) : (
-        ""
-      )}
-      {isRemoveOpen ? (
-        <RemoveModal
-          todo={RemoveTodo}
-          setIsRemoveOpen={setIsRemoveOpen}
-          onRemove={onRemove}
-          key="reomoveModal"
-        />
-      ) : (
-        ""
-      )}
-      ;
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1.0 }}
+        exit={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        style={{ height: "100%" }}
+      >
+        <main css={S.MainContainer}>
+          <TodoHeader onChange={onChange} onKeyUp={onKeyUp} input={input} onAdd={onAdd} />
+          <ul css={S.TodoContentList}>
+            {todoList.map((todo) => {
+              return (
+                <TodoContent
+                  todo={todo}
+                  openModifyModal={openModifyModal}
+                  openRemoveModal={openRemoveModal}
+                  key={todo.id}
+                />
+              );
+            })}
+          </ul>
+        </main>
+        {isModifyOpen ? (
+          <PromptModal
+            todo={modifyTodo}
+            setIsModifyOpen={setIsModifyOpen}
+            onModify={onModify}
+            key="promptModal"
+          />
+        ) : (
+          ""
+        )}
+        {isRemoveOpen ? (
+          <RemoveModal
+            todo={RemoveTodo}
+            setIsRemoveOpen={setIsRemoveOpen}
+            onRemove={onRemove}
+            key="reomoveModal"
+          />
+        ) : (
+          ""
+        )}
+        ;
+      </motion.div>
     </>
   );
 };

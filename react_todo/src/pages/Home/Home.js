@@ -3,6 +3,7 @@ import React from "react";
 import { css } from "@emotion/react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { motion } from "framer-motion";
 
 const HomeContainer = css`
   display: flex;
@@ -62,17 +63,27 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div css={HomeContainer}>
-      <div css={HomeTitle}>
-        <h1>TODO LIST</h1>
-      </div>
-      <div css={HomeDate}>
-        <p>{time.toLocaleDateString()}</p>
-      </div>
-      <div css={HomeTime}>
-        <p>{time.toLocaleTimeString()}</p>
-      </div>
-    </div>
+    <>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1.0 }}
+        exit={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        style={{ height: "100%" }}
+      >
+        <div css={HomeContainer}>
+          <div css={HomeTitle}>
+            <h1>TODO LIST</h1>
+          </div>
+          <div css={HomeDate}>
+            <p>{time.toLocaleDateString()}</p>
+          </div>
+          <div css={HomeTime}>
+            <p>{time.toLocaleTimeString()}</p>
+          </div>
+        </div>
+      </motion.div>
+    </>
   );
 };
 

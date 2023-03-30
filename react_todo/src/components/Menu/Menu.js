@@ -41,6 +41,11 @@ const Menu = () => {
               itemId: "/todo",
               elemBefore: () => <Icon name="check" />,
             },
+            {
+              title: "WEEKLIST",
+              itemId: "/weeklist",
+              elemBefore: () => <Icon name="check" />,
+            },
           ]}
         />
         <MenuButton isOpen={isOpen} MenuClick={MenuClick} />

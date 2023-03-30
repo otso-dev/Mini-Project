@@ -14,7 +14,10 @@ const PromptModal = (props) => {
   };
 
   const onSubmit = () => {
-    console.log(props.todo.id);
+    if (modalContent === "") {
+      alert("Plase Todo add...");
+      return;
+    }
     props.onModify({
       id: props.todo.id,
       content: modalContent,
