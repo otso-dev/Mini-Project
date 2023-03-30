@@ -6,6 +6,7 @@ export const container = css`
   border: 2px solid #dbdbdb;
   width: 600px;
   height: 800px;
-  background-color: #fff;
+  background-color: #454545;
   overflow: hidden;
+  font-family: "Black Han Sans", sans-serif;
 `;

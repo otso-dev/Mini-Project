@@ -3,18 +3,20 @@ export const TodoContent = css`
   margin: 10px;
   width: 230px;
   height: 230px;
-  box-shadow: 0px 0px 5px 1px #dbdbdb;
+  border-radius: 3px;
+  box-shadow: 0px 0px 5px 1px #121212;
+  background-color: #ffff66;
   cursor: pointer;
   &:hover {
-    box-shadow: 0px 0px 5px 1px #121212;
-    transition: box-shadow 0.3s ease;
+    box-shadow: 0px 0px 5px 1px #ffff00;
+    transition: all 0.3s ease;
   }
 `;
 
 export const TodoContentHeader = css`
   display: flex;
   justify-content: space-between;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 2px solid #121212;
   padding: 10px;
   padding-bottom: 5px;
   height: 20%;
@@ -54,9 +56,9 @@ export const ModifyButton = css`
   padding: 5px;
   font-weight: 600;
   cursor: pointer;
-  background-color: #fff;
+  background-color: #ffff66;
   &:hover {
-    background-color: #dbdbdb;
+    background-color: #ffff00;
   }
 `;
 
@@ -65,8 +67,8 @@ export const RemoveButton = css`
   padding: 5px;
   font-weight: 600;
   cursor: pointer;
-  background-color: #fff;
+  background-color: #ffff66;
   &:hover {
-    background-color: #dbdbdb;
+    background-color: #ffff00;
   }
 `;

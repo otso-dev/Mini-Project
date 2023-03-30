@@ -5,6 +5,7 @@ import { reset } from "./styles/Global/reset";
 import TodoList from "./pages/ToDoList/TodoList";
 import TodoContainer from "./components/TodoContainer/TodoContainer";
 import Menu from "./components/Menu/Menu";
+import Home from "./pages/Home/Home";
 // import UserInfomation from "./pages/UserInfomation/UserInfomation";
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
       <TodoContainer>
         <Menu />
         <Routes>
-          <Route path="/" Component={TodoList} />
+          <Route path="/" Component={Home} />
+          <Route path="/todo" Component={TodoList} />
         </Routes>
       </TodoContainer>
     </>

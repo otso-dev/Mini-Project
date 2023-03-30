@@ -7,6 +7,7 @@ import TodoHeader from "../../components/TodoHeader/TodoHeader";
 import PromptModal from "./../../components/Modal/PromptModal/PromptModal";
 import RemoveModal from "./../../components/Modal/RemoveModal/RemoveModal";
 import TodoContent from "../../components/TodoContent/TodoContent";
+// import { motion } from "framer-motion";
 import { useEffect } from "react";
 const TodoList = () => {
   let today = new Date();
@@ -143,18 +144,29 @@ const TodoList = () => {
                 todo={todo}
                 openModifyModal={openModifyModal}
                 openRemoveModal={openRemoveModal}
+                key={todo.id}
               />
             );
           })}
         </ul>
       </main>
       {isModifyOpen ? (
-        <PromptModal todo={modifyTodo} setIsModifyOpen={setIsModifyOpen} onModify={onModify} />
+        <PromptModal
+          todo={modifyTodo}
+          setIsModifyOpen={setIsModifyOpen}
+          onModify={onModify}
+          key="promptModal"
+        />
       ) : (
         ""
       )}
       {isRemoveOpen ? (
-        <RemoveModal todo={RemoveTodo} setIsRemoveOpen={setIsRemoveOpen} onRemove={onRemove} />
+        <RemoveModal
+          todo={RemoveTodo}
+          setIsRemoveOpen={setIsRemoveOpen}
+          onRemove={onRemove}
+          key="reomoveModal"
+        />
       ) : (
         ""
       )}

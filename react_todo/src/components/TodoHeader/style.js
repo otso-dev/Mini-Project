@@ -10,6 +10,7 @@ export const MainTitle = css`
   margin: 20px 0px 0px 20px;
   font-size: 36px;
   font-weight: bold;
+  color: #ffff66;
 `;
 
 export const InputContainer = css`
@@ -17,7 +18,7 @@ export const InputContainer = css`
   display: flex;
   align-items: flex-end;
   margin-bottom: 3px;
-  border-bottom: 1px solid #dbdbdb;
+  border-bottom: 1px solid #121212;
   padding-right: 60px;
   width: 70%;
   height: 40px;
@@ -29,7 +30,7 @@ export const InputTodo = css`
   padding: 0 60px;
   width: 100%;
   height: 100%;
-
+  background-color: #454545;
   &:focus {
     padding: 0 10px;
     background-color: #dbdbdb;
@@ -47,7 +48,7 @@ export const AddButton = css`
   padding: 5px 20px;
   height: 100%;
   cursor: pointer;
-  background-color: #fff;
+  background-color: #454545;
   &:hover {
     background-color: #dbdbdb;
   }
@@ -56,4 +57,5 @@ export const AddButton = css`
 export const Icon = css`
   font-size: 20px;
   margin: 8px;
+  color: #ffff00;
 `;
