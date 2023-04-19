@@ -95,6 +95,10 @@ const Register = () => {
       .then((response) => {
         console.log("성공");
         console.log(response);
+        return "test";
+      })
+      .then((str) => {
+        console.log(str);
       })
       .catch((error) => {
         console.log("에러");

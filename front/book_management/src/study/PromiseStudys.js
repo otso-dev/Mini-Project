@@ -3,6 +3,7 @@ import React from "react";
 const PromiseStudys = () => {
   const a = new Promise((resolve, reject) => {
     console.log("promise 호출");
+    // eslint-disable-next-line no-self-compare
     if (1 !== 1) {
       resolve();
     } else {
