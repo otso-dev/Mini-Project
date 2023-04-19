@@ -69,8 +69,21 @@ const register = css`
   font-weight: 600;
 `;
 
+const errorMsg = css`
+  margin-left: 5px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: red;
+`;
+
 const Register = () => {
   const [registerUser, setRegisterUser] = useState({
+    email: "",
+    password: "",
+    name: "",
+  });
+
+  const [errorMessage, setErrorMessage] = useState({
     email: "",
     password: "",
     name: "",
@@ -81,7 +94,7 @@ const Register = () => {
     setRegisterUser({ ...registerUser, [name]: value });
   };
 
-  const registeSubmit = () => {
+  const registeSubmit = async () => {
     const data = {
       ...registerUser,
     };
@@ -90,21 +103,47 @@ const Register = () => {
         "Content-Type": "application/json",
       },
     };
-    axios
-      .post("http://localhost:8080/auth/signup", JSON.stringify(data), option)
-      .then((response) => {
-        console.log("성공");
-        console.log(response);
-        return "test";
-      })
-      .then((str) => {
-        console.log(str);
-      })
-      .catch((error) => {
-        console.log("에러");
-        console.log(error.response.data.errorData);
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/auth/signup",
+        JSON.stringify(data),
+        option
+      ); //then의 결과를 담을수있다.
+      console.log(response);
+      if (response.status === 200) {
+        setErrorMessage({
+          email: "",
+          password: "",
+          name: "",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setErrorMessage({
+        email: "",
+        password: "",
+        name: "",
+        ...error.response.data.errorData,
       });
-    console.log("비동기 테스트");
+    }
+    //await은 async함수안에서만 쓸 수 있다.
+    //async function test() {} 원형
+    // .then((response) => {
+    //   console.log(response);
+    //   setErrorMessage({
+    //     email: "",
+    //     password: "",
+    //     name: "",
+    //   });
+    // })
+    // .catch((error) => {
+    //   setErrorMessage({
+    //   email: "",
+    //   password: "",
+    //   name: "",
+    //   ...error.response.data.errorData,
+    // });
+    // });
   };
 
   return (
@@ -125,6 +164,7 @@ const Register = () => {
           >
             <FiUser />
           </LoginInput>
+          <div css={errorMsg}>{errorMessage.email}</div>
           <label htmlFor="" css={inputLabel}>
             password
           </label>
@@ -136,6 +176,7 @@ const Register = () => {
           >
             <FiLock />
           </LoginInput>
+          <div css={errorMsg}>{errorMessage.password}</div>
           <label htmlFor="" css={inputLabel}>
             name
           </label>
@@ -147,7 +188,7 @@ const Register = () => {
           >
             <BiRename />
           </LoginInput>
-
+          <div css={errorMsg}>{errorMessage.name}</div>
           <button css={loginButton} onClick={registeSubmit}>
             REGISTER
           </button>
