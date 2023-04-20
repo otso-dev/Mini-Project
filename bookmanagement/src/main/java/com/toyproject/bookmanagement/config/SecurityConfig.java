@@ -8,11 +8,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.toyproject.bookmanagement.security.jwt.JwtTokenProvider;
+
+import lombok.RequiredArgsConstructor;
+
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
+	
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {		
 		return new BCryptPasswordEncoder();

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoginInput from "../../components/UI/Login/LoginInput/LoginInput";
 import { FiUser, FiLock } from "react-icons/fi";
 import { BiRename } from "react-icons/bi";
@@ -77,6 +77,7 @@ const errorMsg = css`
 `;
 
 const Register = () => {
+  const navigate = useNavigate();
   const [registerUser, setRegisterUser] = useState({
     email: "",
     password: "",
@@ -104,19 +105,18 @@ const Register = () => {
       },
     };
     try {
-      const response = await axios.post(
+      await axios.post(
         "http://localhost:8080/auth/signup",
         JSON.stringify(data),
         option
       ); //then의 결과를 담을수있다.
-      console.log(response);
-      if (response.status === 200) {
-        setErrorMessage({
-          email: "",
-          password: "",
-          name: "",
-        });
-      }
+      setErrorMessage({
+        email: "",
+        password: "",
+        name: "",
+      });
+      alert("회원가입 성공");
+      navigate("/login");
     } catch (error) {
       console.log(error);
       setErrorMessage({

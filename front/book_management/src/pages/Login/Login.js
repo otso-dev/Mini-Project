@@ -1,11 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import LoginInput from "../../components/UI/Login/LoginInput/LoginInput";
 import { FiUser, FiLock } from "react-icons/fi";
 import { BsGoogle } from "react-icons/bs";
 import { SiNaver, SiKakao } from "react-icons/si";
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import { authenticated } from "../../index";
 
 const container = css`
   display: flex;
@@ -113,7 +116,68 @@ const oauth2Container = css`
   width: 100%;
 `;
 
+const errorMsg = css`
+  margin-left: 5px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: red;
+`;
+
 const Login = () => {
+  const [loginUser, setLoginUser] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [errorMessage, setErrorMessage] = useState({
+    email: "",
+  });
+
+  const [auth, setAuth] = useRecoilState(authenticated);
+  const navigate = useNavigate();
+
+  const onChangeHandler = (e) => {
+    const { name, value } = e.target;
+    setLoginUser({
+      ...loginUser,
+      [name]: value,
+    });
+  };
+
+  const clickLogin = async () => {
+    const data = {
+      ...loginUser,
+    };
+    const option = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/auth/login",
+        JSON.stringify(data),
+        option
+      );
+      const accessToken =
+        response.data.grantType + " " + response.data.accessToken;
+      localStorage.setItem("accessToken", accessToken);
+      setAuth(true);
+      navigate("/");
+      setErrorMessage({
+        email: "",
+        password: "",
+      });
+    } catch (error) {
+      console.log(error);
+      setErrorMessage({
+        email: "",
+        password: "",
+        ...error.response.data.errorData,
+      });
+    }
+  };
+
   return (
     <div css={container}>
       <header>
@@ -124,19 +188,34 @@ const Login = () => {
           <label css={inputLabel} for="">
             Email
           </label>
-          <LoginInput type="email" placeholder="Type your email">
+          <LoginInput
+            type="email"
+            placeholder="Type your email"
+            name="email"
+            onChange={onChangeHandler}
+          >
             <FiUser />
           </LoginInput>
+          <div css={errorMsg}>{errorMessage.email}</div>
           <label for="" css={inputLabel}>
             password
           </label>
-          <LoginInput type="password" placeholder="Type your password">
+          <LoginInput
+            type="password"
+            placeholder="Type your password"
+            name="password"
+            onChange={onChangeHandler}
+          >
             <FiLock />
           </LoginInput>
+          <div css={errorMsg}>{errorMessage.password}</div>
+
           <div css={forgotPassword}>
             <Link to="/forgot/password">Forgot Password?</Link>
           </div>
-          <button css={loginButton}>LOGIN</button>
+          <button css={loginButton} onClick={clickLogin}>
+            LOGIN
+          </button>
         </div>
       </main>
 

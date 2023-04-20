@@ -14,5 +14,5 @@ public interface UserRepository {
 	
 	public int saveUser(User user);
 	
-	public int addAuthorities(List<Authority> authorities);
+	public int addAuthorities(Authority authorities);
 }
