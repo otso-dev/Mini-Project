@@ -47,7 +47,7 @@ public class PrincipalsUser implements UserDetails{
 		// TODO Auto-generated method stub
 		return email;
 	}
-
+ 
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub

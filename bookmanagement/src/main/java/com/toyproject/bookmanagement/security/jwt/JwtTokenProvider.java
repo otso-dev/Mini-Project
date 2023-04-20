@@ -2,15 +2,12 @@ package com.toyproject.bookmanagement.security.jwt;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.toyproject.bookmanagement.dto.auth.response.JwtTokenRespDto;
-import com.toyproject.bookmanagement.security.PrincipalsUser;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
