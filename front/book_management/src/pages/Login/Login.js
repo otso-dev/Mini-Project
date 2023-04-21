@@ -8,7 +8,7 @@ import { BsGoogle } from "react-icons/bs";
 import { SiNaver, SiKakao } from "react-icons/si";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { authenticated } from "../../index";
+import { refreshState } from "../../atoms/Auth/AuthAtoms";
 
 const container = css`
   display: flex;
@@ -133,7 +133,7 @@ const Login = () => {
     email: "",
   });
 
-  const [auth, setAuth] = useRecoilState(authenticated);
+  const [refresh, setRefresh] = useRecoilState(refreshState);
   const navigate = useNavigate();
 
   const onChangeHandler = (e) => {
@@ -145,9 +145,6 @@ const Login = () => {
   };
 
   const clickLogin = async () => {
-    const data = {
-      ...loginUser,
-    };
     const option = {
       headers: {
         "Content-Type": "application/json",
@@ -156,13 +153,13 @@ const Login = () => {
     try {
       const response = await axios.post(
         "http://localhost:8080/auth/login",
-        JSON.stringify(data),
+        JSON.stringify(loginUser),
         option
       );
       const accessToken =
         response.data.grantType + " " + response.data.accessToken;
       localStorage.setItem("accessToken", accessToken);
-      setAuth(true);
+      setRefresh(false);
       navigate("/");
       setErrorMessage({
         email: "",
@@ -185,9 +182,7 @@ const Login = () => {
       </header>
       <main css={mainContainer}>
         <div css={authForm}>
-          <label css={inputLabel} for="">
-            Email
-          </label>
+          <label css={inputLabel}>Email</label>
           <LoginInput
             type="email"
             placeholder="Type your email"
@@ -197,9 +192,7 @@ const Login = () => {
             <FiUser />
           </LoginInput>
           <div css={errorMsg}>{errorMessage.email}</div>
-          <label for="" css={inputLabel}>
-            password
-          </label>
+          <label css={inputLabel}>password</label>
           <LoginInput
             type="password"
             placeholder="Type your password"

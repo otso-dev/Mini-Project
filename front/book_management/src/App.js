@@ -6,29 +6,28 @@ import Register from "./pages/Register/Register";
 // import Callback from "./study/Callback";
 // import PromiseStudys from "./study/PromiseStudys";
 import Main from "./pages/Main/Main";
-import AuthRoute from "./components/Routes/AuthRoute/AuthRoute";
-import { useRecoilValue } from "recoil";
-import { authenticated } from "./index";
+import AuthRouteReactQuery from "./components/Routes/AuthRoute/AuthRouteReactQuery";
 
 function App() {
   return (
     <>
       <Global styles={Reset}></Global>
       <Routes>
-        <Route exact path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
         <Route
-          path="/"
+          exact
+          path="/login"
+          element={<AuthRouteReactQuery path="/login" element={<Login />} />}
+        />
+        <Route
+          path="/register"
           element={
-            <AuthRoute
-              authenticated={useRecoilValue(authenticated)}
-              element={<Main />}
-            />
+            <AuthRouteReactQuery path="/register" element={<Register />} />
           }
         />
-
-        {/* <Route path="/callback" Component={Callback} /> */}
-        {/* <Route path="/promise" Component={PromiseStudys} /> */}
+        <Route
+          path="/"
+          element={<AuthRouteReactQuery path="/" element={<Main />} />}
+        />
       </Routes>
     </>
   );
