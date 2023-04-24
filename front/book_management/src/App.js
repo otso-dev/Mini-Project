@@ -28,6 +28,10 @@ function App() {
           path="/"
           element={<AuthRouteReactQuery path="/" element={<Main />} />}
         />
+        <Route
+          path="/admin/search"
+          element={<AuthRouteReactQuery path="/" element={<Main />} />}
+        />
       </Routes>
     </>
   );

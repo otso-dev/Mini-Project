@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 
 import com.toyproject.bookmanagement.dto.auth.response.JwtTokenRespDto;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -84,5 +85,13 @@ public class JwtTokenProvider {
 			return token.substring(type.length());
 		}
 		return null;
+	}
+	
+	public Claims getClaims(String token) {
+		return Jwts.parserBuilder()
+				.setSigningKey(key)
+				.build()
+				.parseClaimsJws(token)
+				.getBody();//
 	}
 }

@@ -45,6 +45,10 @@ public class AuthenticationController {
 		return ResponseEntity.ok().body(authenticationServrice.authenticated(accessToken));
 	}
 	
+	@GetMapping("/principal")
+	public ResponseEntity<?> principal(String accessToken){
+		return ResponseEntity.ok().body(authenticationServrice.getPrincipal(accessToken));
+	}
 }
 //cors란 서버와 클라이언트의 port번호가 다르기 때문에 발생한다.
 //cors를 해결하려면 서버에서 특정 포트, 특정 메소드, 특정 url을 허용시켜주면 된다.
