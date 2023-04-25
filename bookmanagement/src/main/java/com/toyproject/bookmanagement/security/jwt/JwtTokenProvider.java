@@ -1,14 +1,21 @@
 package com.toyproject.bookmanagement.security.jwt;
 
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.toyproject.bookmanagement.dto.auth.response.JwtTokenRespDto;
+import com.toyproject.bookmanagement.exception.CustomException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -32,17 +39,17 @@ public class JwtTokenProvider {
 	}
 
 	public JwtTokenRespDto generateToken(Authentication authentication) {
-		
+
 		String authorities = null;
 		StringBuilder builder = new StringBuilder();
-		authentication.getAuthorities().forEach(authority ->{
+		authentication.getAuthorities().forEach(authority -> {
 			builder.append(authority.getAuthority() + ",");
 		});
-		
+
 		builder.delete(builder.length() - 1, builder.length());
-		
+
 		authorities = builder.toString();
-		
+
 		Date tokenExpriesDate = new Date(new Date().getTime() + (1000 * 60 * 60 * 24));
 
 		String accessToken = Jwts.builder().setSubject(authentication.getName())// 토큰의 제목
@@ -53,7 +60,7 @@ public class JwtTokenProvider {
 
 		return JwtTokenRespDto.builder().grantType("Bearer").accessToken(accessToken).build();
 	}
-	
+
 	public boolean validateToken(String token) {
 		try {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -77,21 +84,36 @@ public class JwtTokenProvider {
 		}
 		return false;
 	}
-	
+
 	public String getToken(String token) {
-		String type ="Bearer";
-		
-		if(StringUtils.hasText(token) && token.startsWith(type)) {
+		String type = "Bearer";
+
+		if (StringUtils.hasText(token) && token.startsWith(type)) {
 			return token.substring(type.length());
 		}
 		return null;
 	}
-	
+
 	public Claims getClaims(String token) {
-		return Jwts.parserBuilder()
-				.setSigningKey(key)
-				.build()
-				.parseClaimsJws(token)
-				.getBody();//
+		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();//
+	}
+
+	public Authentication getAuthentication(String accessToken) {
+		Authentication authentication = null;
+		Claims claims = getClaims(accessToken);
+		if(claims.get("auth") == null) {
+			throw new CustomException("AccessToken에 권한 정보가 없습니다.");
+		}
+		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+		String auth = claims.get("auth").toString();
+		
+		for(String role : auth.split(",")) {
+			authorities.add(new SimpleGrantedAuthority(role));
+		}
+		UserDetails userDetails = new User(claims.getSubject(), "", authorities);
+
+		authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+		return authentication;
 	}
 }

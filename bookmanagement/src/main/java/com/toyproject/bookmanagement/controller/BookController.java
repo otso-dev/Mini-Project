@@ -18,6 +18,12 @@ public class BookController {
 	
 	@GetMapping("/books")
 	public ResponseEntity<?> searchBooks(SearchBookReqDto serBookReqDto){
+		System.out.println(serBookReqDto);
 		return ResponseEntity.ok().body(bookService.searchBooks(serBookReqDto));
+	}
+	
+	@GetMapping("/categories")
+	public ResponseEntity<?> categories(){
+		return ResponseEntity.ok(bookService.getCategories());
 	}
 }
