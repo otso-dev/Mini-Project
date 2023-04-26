@@ -8,6 +8,7 @@
 		<result property="publisherId" column="publisher_id"/>
 		<result property="categoryId" column="category_id"/>
 		<result property="coverImgUrl" column="cover_img_url"/>
+		<result property="likeCount" column="like_count"/>
 		<association property="author" resultMap="AuthorMap"></association>
 		<association property="publisher" resultMap="PublisherMap"></association>
 		<association property="category" resultMap="CategoryMap"></association>
@@ -33,6 +34,8 @@
 	    bt.category_id,
 	    bt.cover_img_url,
 	    
+	    lc.like_count,
+	    
 	    ab.author_id,
 	    ab.author_name,
 	    
@@ -47,6 +50,7 @@
 	    left outer join author_tb ab on(ab.author_id = bt.author_id)
 	    left outer join publisher_tb pb on(pb.publisher_id = bt.publisher_id)
 	    left outer join category_tb cb on (cb.category_id = bt.category_id)	
+	    left outer join (select book_id, count(*) as like_count from book_like_tb group by book_id) lc on (lc.book_id = bt.book_id)
 	where
 		1=1
 		<if test="categoryIds != null">
@@ -115,5 +119,24 @@
 		category_name
 	from
 		category_tb
+	</select>
+	
+	<select id="getLikeCount" parameterType="Integer" resultType="Integer">
+		select
+			count(*)
+		from
+			book_like_tb
+		where
+			book_id = #{bookId}
+	</select>
+	
+	<select id="getLikeStatus" parameterType="hashMap" resultType="Integer">
+		select
+			count(*)
+		from
+			book_like_tb
+		where
+			book_id = #{bookId}
+		and user_id = #{userId}
 	</select>
 </mapper>

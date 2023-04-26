@@ -14,4 +14,6 @@ public interface BookRepository {
 	public int getBookTotalCount(Map<String, Object>map);
 	public List<Category> categories();
 	public Book getBook(int bookId);
+	public int getLikeCount(int bookId);
+	public int getLikeStatus(Map<String,Object> map);
 }

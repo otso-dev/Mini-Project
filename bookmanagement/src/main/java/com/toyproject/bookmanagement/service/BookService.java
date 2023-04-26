@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.toyproject.bookmanagement.dto.book.CategoryRespDto;
@@ -13,7 +14,9 @@ import com.toyproject.bookmanagement.dto.book.SearchBookReqDto;
 import com.toyproject.bookmanagement.dto.book.SearchBookRespDto;
 import com.toyproject.bookmanagement.entity.Book;
 import com.toyproject.bookmanagement.entity.Category;
+import com.toyproject.bookmanagement.entity.User;
 import com.toyproject.bookmanagement.repository.BookRepository;
+import com.toyproject.bookmanagement.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class BookService {
 
 	private final BookRepository bookRepository;
+	private final UserRepository userRepository;
 	
 	public GetBookRespDto getBook(int bookId) {
 		return bookRepository.getBook(bookId).toGetBook();
@@ -53,5 +57,18 @@ public class BookService {
 			list.add(category.toDto());
 		});
 		return list;
+	}
+	
+	public int getLikeCount(int bookId) {
+		return bookRepository.getLikeCount(bookId);
+	}
+	
+	public int getLikeStatus(int bookId) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("bookId", bookId);
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+		User user = userRepository.findUserByEmail(email);
+		map.put("userId", user.getUserId());
+		return bookRepository.getLikeStatus(map);
 	}
 }

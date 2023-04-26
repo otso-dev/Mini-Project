@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean{
 		String accessToken = httpRequest.getHeader("Authorization");
 		
 		if (accessToken == null) {
-			log.warn("BeforeFilter nullToken");
+			log.info("BeforeFilter nullToken");
 		} else {
 			accessToken = jwtTokenProvider.getToken(accessToken);
 			boolean validationFlag = jwtTokenProvider.validateToken(accessToken);

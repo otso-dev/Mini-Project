@@ -12,7 +12,6 @@ const AuthRouteReactQuery = ({ path, element }) => {
     async () => {
       const accessToken = localStorage.getItem("accessToken");
       const response = await axios.get("http://localhost:8080/auth/authenticated", { params: { accessToken } });
-      console.log("authenticated");
       return response;
     },
     {
@@ -27,7 +26,6 @@ const AuthRouteReactQuery = ({ path, element }) => {
   }, [refresh]);
 
   if (isLoading) {
-    console.log("testloading");
     return <div>로딩중....</div>;
   }
 

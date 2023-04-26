@@ -119,7 +119,7 @@ const BookCard = ({ book }) => {
           <div css={likeIcon}>
             <AiOutlineLike />
           </div>
-          추천: 10{" "}
+          추천: {book.likeCount}
         </div>
         <h2>저자: {book.authorName}</h2>
         <h2>출판사: {book.publisherName}</h2>
