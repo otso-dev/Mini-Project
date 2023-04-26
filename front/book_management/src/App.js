@@ -7,31 +7,18 @@ import Register from "./pages/Register/Register";
 // import PromiseStudys from "./study/PromiseStudys";
 import Main from "./pages/Main/Main";
 import AuthRouteReactQuery from "./components/Routes/AuthRoute/AuthRouteReactQuery";
+import BookDetail from "./pages/BookDetail/BookDetail";
 
 function App() {
   return (
     <>
       <Global styles={Reset}></Global>
       <Routes>
-        <Route
-          exact
-          path="/login"
-          element={<AuthRouteReactQuery path="/login" element={<Login />} />}
-        />
-        <Route
-          path="/register"
-          element={
-            <AuthRouteReactQuery path="/register" element={<Register />} />
-          }
-        />
-        <Route
-          path="/"
-          element={<AuthRouteReactQuery path="/" element={<Main />} />}
-        />
-        <Route
-          path="/admin/search"
-          element={<AuthRouteReactQuery path="/" element={<Main />} />}
-        />
+        <Route exact path="/login" element={<AuthRouteReactQuery path="/login" element={<Login />} />} />
+        <Route path="/register" element={<AuthRouteReactQuery path="/register" element={<Register />} />} />
+        <Route path="/" element={<AuthRouteReactQuery path="/" element={<Main />} />} />
+        <Route path="/book/:bookId" element={<AuthRouteReactQuery path="/book" element={<BookDetail />} />} />
+        <Route path="/admin/search" element={<AuthRouteReactQuery path="/" element={<Main />} />} />
       </Routes>
     </>
   );

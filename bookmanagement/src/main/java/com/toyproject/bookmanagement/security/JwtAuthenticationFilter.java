@@ -7,17 +7,20 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.filter.GenericFilterBean;
 
+import com.toyproject.bookmanagement.exception.CustomException;
 import com.toyproject.bookmanagement.security.jwt.JwtTokenProvider;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends GenericFilterBean{
 	
@@ -28,15 +31,18 @@ public class JwtAuthenticationFilter extends GenericFilterBean{
 			throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String accessToken = httpRequest.getHeader("Authorization");
-		accessToken = jwtTokenProvider.getToken(accessToken);
-		boolean validationFlag = jwtTokenProvider.validateToken(accessToken);
-		if(validationFlag) {
-			Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+		
+		if (accessToken == null) {
+			log.warn("BeforeFilter nullToken");
+		} else {
+			accessToken = jwtTokenProvider.getToken(accessToken);
+			boolean validationFlag = jwtTokenProvider.validateToken(accessToken);
+			if(validationFlag) {
+				Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
 		}
 		
-		chain.doFilter(request, response);
-		
+		chain.doFilter(request, response);	
 	}
-
 }

@@ -11,10 +11,8 @@ const AuthRouteReactQuery = ({ path, element }) => {
     ["authenticated"],
     async () => {
       const accessToken = localStorage.getItem("accessToken");
-      const response = await axios.get(
-        "http://localhost:8080/auth/authenticated",
-        { params: { accessToken } }
-      );
+      const response = await axios.get("http://localhost:8080/auth/authenticated", { params: { accessToken } });
+      console.log("authenticated");
       return response;
     },
     {

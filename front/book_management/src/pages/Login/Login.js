@@ -76,23 +76,14 @@ const oauth2 = (provider) => css`
   justify-content: center;
   align-items: center;
   margin: 0px 10px;
-  border: 3px solid
-    ${provider === "google"
-      ? "#0075ff"
-      : provider === "naver"
-      ? "#19ce60"
-      : "#ffdc00"};
+  border: 3px solid ${provider === "google" ? "#0075ff" : provider === "naver" ? "#19ce60" : "#ffdc00"};
   border-radius: 50%;
   width: 50px;
   height: 50px;
   font-size: ${provider === "kakao" ? "30px" : "20px"};
   cursor: pointer;
   &:hover {
-    background-color: ${provider === "google"
-      ? "#0075ff"
-      : provider === "naver"
-      ? "#19ce60"
-      : "#ffdc00"};
+    background-color: ${provider === "google" ? "#0075ff" : provider === "naver" ? "#19ce60" : "#ffdc00"};
   }
 `;
 
@@ -151,13 +142,8 @@ const Login = () => {
       },
     };
     try {
-      const response = await axios.post(
-        "http://localhost:8080/auth/login",
-        JSON.stringify(loginUser),
-        option
-      );
-      const accessToken =
-        response.data.grantType + " " + response.data.accessToken;
+      const response = await axios.post("http://localhost:8080/auth/login", JSON.stringify(loginUser), option);
+      const accessToken = response.data.grantType + " " + response.data.accessToken;
       localStorage.setItem("accessToken", accessToken);
       setRefresh(false);
       navigate("/");
@@ -183,22 +169,12 @@ const Login = () => {
       <main css={mainContainer}>
         <div css={authForm}>
           <label css={inputLabel}>Email</label>
-          <LoginInput
-            type="email"
-            placeholder="Type your email"
-            name="email"
-            onChange={onChangeHandler}
-          >
+          <LoginInput type="email" placeholder="Type your email" name="email" onChange={onChangeHandler}>
             <FiUser />
           </LoginInput>
           <div css={errorMsg}>{errorMessage.email}</div>
           <label css={inputLabel}>password</label>
-          <LoginInput
-            type="password"
-            placeholder="Type your password"
-            name="password"
-            onChange={onChangeHandler}
-          >
+          <LoginInput type="password" placeholder="Type your password" name="password" onChange={onChangeHandler}>
             <FiLock />
           </LoginInput>
           <div css={errorMsg}>{errorMessage.password}</div>

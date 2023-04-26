@@ -79,6 +79,7 @@ public class JwtTokenProvider {
 		} catch (IllegalArgumentException e) {
 			// JWT token이 없을 떄
 			log.info("IllegalArgument JWT TOKEN", e);
+			System.out.println("JWT TOKEN");
 		} catch (Exception e) {
 			log.info("JWT TOKEN Error", e);
 		}

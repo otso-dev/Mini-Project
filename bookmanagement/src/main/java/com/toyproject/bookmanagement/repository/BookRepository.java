@@ -13,4 +13,5 @@ public interface BookRepository {
 	public List<Book> searchBooks(Map<String, Object> map);
 	public int getBookTotalCount(Map<String, Object>map);
 	public List<Category> categories();
+	public Book getBook(int bookId);
 }
