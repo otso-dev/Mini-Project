@@ -82,7 +82,7 @@
 			and bt.book_name like concat("%",#{searchValue},"%")
 	</select>
 	
-	<select id="getBook" resultType="Integer">
+	<select id="getBook" resultMap="BookMap">
 		SELECT 
 		bt.book_id,
 	    bt.book_name,
