@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 const table = css`
@@ -28,7 +28,6 @@ const RentalList = ({ bookId }) => {
   const rentalBook = useMutation(
     async (bookListId) => {
       const data = {
-        bookListId: bookListId,
         userId: queryClient.getQueryData("principal").data.userId,
       };
       console.log(data);
@@ -39,7 +38,7 @@ const RentalList = ({ bookId }) => {
         },
       };
       const response = await axios.post(
-        `http://localhost:8080/book/${bookId}/rental/list`,
+        `http://localhost:8080/book/rental/${bookListId}`,
         JSON.stringify(data),
         option
       );
@@ -55,14 +54,13 @@ const RentalList = ({ bookId }) => {
     async (bookListId) => {
       const option = {
         params: {
-          bookListId: bookListId,
           userId: queryClient.getQueryData("principal").data.userId,
         },
         headers: {
           Authorization: localStorage.getItem("accessToken"),
         },
       };
-      const response = await axios.delete(`http://localhost:8080/book/${bookId}/rental/list`, option);
+      const response = await axios.delete(`http://localhost:8080/book/rental/${bookListId}`, option);
       return response;
     },
     {
@@ -75,7 +73,6 @@ const RentalList = ({ bookId }) => {
   if (getRentalList.isLoading) {
     return <div>로딩중</div>;
   }
-
   return (
     <>
       <table css={table}>
