@@ -10,10 +10,13 @@ import org.springframework.stereotype.Service;
 
 import com.toyproject.bookmanagement.dto.book.CategoryRespDto;
 import com.toyproject.bookmanagement.dto.book.GetBookRespDto;
+import com.toyproject.bookmanagement.dto.book.RentalListRespDto;
+import com.toyproject.bookmanagement.dto.book.RentalReqDto;
 import com.toyproject.bookmanagement.dto.book.SearchBookReqDto;
 import com.toyproject.bookmanagement.dto.book.SearchBookRespDto;
 import com.toyproject.bookmanagement.entity.Book;
 import com.toyproject.bookmanagement.entity.Category;
+import com.toyproject.bookmanagement.entity.RentalList;
 import com.toyproject.bookmanagement.entity.User;
 import com.toyproject.bookmanagement.repository.BookRepository;
 import com.toyproject.bookmanagement.repository.UserRepository;
@@ -26,7 +29,7 @@ public class BookService {
 
 	private final BookRepository bookRepository;
 	private final UserRepository userRepository;
-	
+
 	public GetBookRespDto getBook(int bookId) {
 		return bookRepository.getBook(bookId).toGetBook();
 	}
@@ -37,38 +40,74 @@ public class BookService {
 		Map<String, Object> map = new HashMap<>();
 		map.put("index", index);
 		map.put("categoryIds", searchBookReqDto.getCategoryIds());
-		map.put("searchValue",searchBookReqDto.getSearchValue());
-		
-		bookRepository.searchBooks(map).forEach(book ->{
+		map.put("searchValue", searchBookReqDto.getSearchValue());
+
+		bookRepository.searchBooks(map).forEach(book -> {
 			list.add(book.toDto());
 		});
 		int totalCount = bookRepository.getBookTotalCount(map);
 		Map<String, Object> responseMap = new HashMap<>();
 		responseMap.put("totalCount", totalCount);
 		responseMap.put("bookList", list);
-		
-		
+
 		return responseMap;
 	}
-	
-	public List<CategoryRespDto> getCategories(){
+
+	public List<CategoryRespDto> getCategories() {
 		List<CategoryRespDto> list = new ArrayList<>();
-		bookRepository.categories().forEach(category ->{
+		bookRepository.categories().forEach(category -> {
 			list.add(category.toDto());
 		});
 		return list;
 	}
-	
+
 	public int getLikeCount(int bookId) {
 		return bookRepository.getLikeCount(bookId);
 	}
-	
-	public int getLikeStatus(int bookId) {
-		Map<String,Object> map = new HashMap<>();
+
+	public int getLikeStatus(int bookId, int userId) {
+		Map<String, Object> map = new HashMap<>();
 		map.put("bookId", bookId);
-		String email = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userRepository.findUserByEmail(email);
-		map.put("userId", user.getUserId());
+		map.put("userId", userId);
 		return bookRepository.getLikeStatus(map);
 	}
+
+	public int setLike(int bookId, int userId) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("bookId", bookId);
+		map.put("userId", userId);
+		return bookRepository.setLike(map);
+	}
+
+	public int disLike(int bookId, int userId) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("bookId", bookId);
+		map.put("userId", userId);
+		return bookRepository.disLike(map);
+	}
+	
+	public List<RentalListRespDto> getRentalList(int bookId){
+		List<RentalListRespDto> list = new ArrayList<>();
+		bookRepository.getRentalListByBookId(bookId).forEach(rentalData ->{
+			list.add(rentalData.toDto());
+		});
+		return list;
+	}
+	
+	public int rentalBook(RentalReqDto rentalReqDto) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("bookListId", rentalReqDto.getBookListId());
+		map.put("userId", rentalReqDto.getUserId());
+		return bookRepository.rentalBook(map);
+	}
+	
+	public int returnBook(int bookListId, int userId) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("bookListId", bookListId);
+		map.put("userId", userId);
+		return bookRepository.returnBook(map);
+	}
 }
+
+//String email = SecurityContextHolder.getContext().getAuthentication().getName();
+//User user = userRepository.findUserByEmail(email); 
