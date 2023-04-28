@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { GrFormClose } from "react-icons/gr";
 import { BiLike, BiHome, BiListUl, BiLogOut } from "react-icons/bi";
 import ListButton from "./ListButton/ListButton";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 
 const sidebar = (isOpen) => css`
@@ -92,17 +92,7 @@ const footer = css`
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { data, isLoading } = useQuery(["principal"], async () => {
-    const accessToken = localStorage.getItem("accessToken");
-    const response = await axios.get(
-      "http://localhost:8080/auth/principal",
-      { params: { accessToken } },
-      {
-        enabled: accessToken,
-      }
-    );
-    return response;
-  });
+  const queryClient = useQueryClient();
   const sidebarOpenClickHandler = () => {
     if (!isOpen) {
       setIsOpen(true);
@@ -111,47 +101,57 @@ const Sidebar = () => {
   const sidebarCloseClickHandler = () => {
     setIsOpen(false);
   };
-  if (isLoading) {
-    return <>로딩중....</>;
-  }
 
   const logoutClickHandler = () => {
     if (window.confirm("로그아웃하시겠습니까?")) {
       localStorage.removeItem("accessToken");
+      queryClient.invalidateQueries("principal");
     }
   };
 
-  if (!isLoading)
-    return (
-      <div onClick={sidebarOpenClickHandler} css={sidebar(isOpen)}>
-        <header css={header}>
-          <div css={userIcon}>{data.data.name.substr(0, 1)}</div>
-          <div css={userInfo}>
-            <h1 css={userName}>{data.data.name}</h1>
-            <p css={userEmail}>{data.data.email}</p>
-          </div>
-          <div css={closeButton} onClick={sidebarCloseClickHandler}>
-            <GrFormClose />
-          </div>
-        </header>
-        <main css={main}>
-          <ListButton title="Dashboard">
-            <BiHome />
-          </ListButton>
-          <ListButton title="Likes">
-            <BiLike />{" "}
-          </ListButton>
-          <ListButton title="Rental">
+  if (queryClient.getQueryState("principal").status === "loading") {
+    return <>로딩중....</>;
+  }
+
+  const principalData = queryClient.getQueryData("principal").data;
+  const roles = principalData.authorities.split(",");
+  return (
+    <div onClick={sidebarOpenClickHandler} css={sidebar(isOpen)}>
+      <header css={header}>
+        <div css={userIcon}>{principalData.name.substr(0, 1)}</div>
+        <div css={userInfo}>
+          <h1 css={userName}>{principalData.name}</h1>
+          <p css={userEmail}>{principalData.email}</p>
+        </div>
+        <div css={closeButton} onClick={sidebarCloseClickHandler}>
+          <GrFormClose />
+        </div>
+      </header>
+      <main css={main}>
+        <ListButton title="Dashboard">
+          <BiHome />
+        </ListButton>
+        <ListButton title="Likes">
+          <BiLike />
+        </ListButton>
+        <ListButton title="Rental">
+          <BiListUl />
+        </ListButton>
+        {roles.includes("ROLE_ADMIN") ? (
+          <ListButton title="RegisterBookList">
             <BiListUl />
           </ListButton>
-        </main>
-        <footer css={footer}>
-          <ListButton title="Logout" onClick={logoutClickHandler}>
-            <BiLogOut />
-          </ListButton>
-        </footer>
-      </div>
-    );
+        ) : (
+          ""
+        )}
+      </main>
+      <footer css={footer}>
+        <ListButton title="Logout" onClick={logoutClickHandler}>
+          <BiLogOut />
+        </ListButton>
+      </footer>
+    </div>
+  );
 };
 
 export default Sidebar;

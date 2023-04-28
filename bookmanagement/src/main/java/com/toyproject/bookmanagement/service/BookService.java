@@ -28,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 public class BookService {
 
 	private final BookRepository bookRepository;
-	private final UserRepository userRepository;
 
 	public GetBookRespDto getBook(int bookId) {
 		return bookRepository.getBook(bookId).toGetBook();
@@ -106,6 +105,10 @@ public class BookService {
 		map.put("bookListId", bookListId);
 		map.put("userId", userId);
 		return bookRepository.returnBook(map);
+	}
+	
+	public int registeBookList(int bookId) {
+		return bookRepository.registeBookList(bookId);
 	}
 }
 
