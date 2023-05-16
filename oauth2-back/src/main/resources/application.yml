@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/book_management 
@@ -50,3 +54,8 @@ mybatis:
 
 jwt:
   secret: h0TbPx1JMLd5otoav4BLG33VXAB9g58hzsPZkQYqsMVv6RyFPj44i12C9L4opNec
+  
+  
+file:
+  path: C:\junil\seonghyeon\OAuth2\oauth2-back\upload\
+# spring에서 설정을 해줘야할때는 application.yml에서 함

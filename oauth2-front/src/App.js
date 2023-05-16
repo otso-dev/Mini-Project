@@ -6,13 +6,17 @@ import OAuth2Merge from "./page/OAuth2Merge/OAuth2Merge";
 import Index from "./page/INDEX/Index";
 import OAuth2Login from "./page/Login/OAuth2Login";
 import AuthRoute from "./components/AuthRoute";
+import PostRegister from "./page/Posts/PostRegister";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<AuthRoute path={"/"} element={<Index />} />} />
+
         <Route path="/mypage" element={<AuthRoute path={"/mypage"} element={<Index />} />} />
+        <Route path="/post/register" element={<AuthRoute path={"/post/register"} element={<PostRegister />} />} />
+
         <Route path="/auth/login" element={<AuthRoute path={"/auth/login"} element={<Login />} />} />
         <Route path="/auth/register" />
         <Route
