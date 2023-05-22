@@ -39,7 +39,7 @@ const AuthRoute = ({ path, element }) => {
   }
 
   if (authState && path.startsWith(authPath)) {
-    navigate("/");
+    return element;
   }
 
   if (!authState && authenticatedPaths.filter((authenticatedPath) => path.startsWith(authenticatedPath)).length > 0) {
