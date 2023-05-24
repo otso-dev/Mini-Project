@@ -30,7 +30,7 @@ public class WebMvcConfig implements WebMvcConfigurer{
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		WebMvcConfigurer.super.addResourceHandlers(registry);
 		registry.addResourceHandler("/image/**")
-				.addResourceLocations("file:///"+ filePath)
+				.addResourceLocations("file:///"+ filePath)//image로 경로를 이걸로 대체해라
 				.resourceChain(true)
 				.addResolver(new PathResourceResolver() {
 					@Override

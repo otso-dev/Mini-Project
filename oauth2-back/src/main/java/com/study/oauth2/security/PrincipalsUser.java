@@ -23,6 +23,7 @@ public class PrincipalsUser implements UserDetails{
 	private String email;
 	private String password;
 	private String provider;
+	private String profileImg;
 	
 	private List<Authority> authorities;
 	

@@ -14,4 +14,6 @@ public interface UserRepository {
 	public int addAuthorities(Authority authorities);
 	
 	public int updateProvider(User user);
+	
+	public int updateProfileImg(User user);
 }

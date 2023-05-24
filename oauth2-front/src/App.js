@@ -8,6 +8,7 @@ import OAuth2Login from "./page/Login/OAuth2Login";
 import AuthRoute from "./components/AuthRoute";
 import PostRegister from "./page/Posts/PostRegister";
 import ForgotPassword from "./page/Forgot/ForgotPassword";
+import Profile from "./page/MyPage/Profile";
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
         />
         <Route path="/" element={<AuthRoute path={"/"} element={<Index />} />} />
 
-        <Route path="/mypage" element={<AuthRoute path={"/mypage"} element={<Index />} />} />
+        <Route path="/mypage/profile" element={<AuthRoute path={"/mypage/profile"} element={<Profile />} />} />
         <Route path="/post/register" element={<AuthRoute path={"/post/register"} element={<PostRegister />} />} />
 
         <Route path="/auth/login" element={<AuthRoute path={"/auth/login"} element={<Login />} />} />
