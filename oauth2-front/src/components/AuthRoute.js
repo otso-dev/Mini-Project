@@ -23,6 +23,7 @@ const AuthRoute = ({ path, element }) => {
         if (response.status === 200) {
           if (response.data) {
             setAuthState(true);
+            console.log("테스트");
           }
         }
       },
