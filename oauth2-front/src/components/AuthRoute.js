@@ -30,8 +30,7 @@ const AuthRoute = ({ path, element }) => {
     }
   );
 
-  console.log(authState);
-
+  console.log(authState + "테스트 ");
   const authenticatedPaths = ["/mypage", "/user", "/post"];
   const authPath = "/auth";
 
