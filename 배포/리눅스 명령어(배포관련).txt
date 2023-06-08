@@ -1,0 +1,26 @@
+jdk  sudo apt install openjdk-버전-jdk jdk 다운
+git  sudo apt install git git 다운
+	git config --global user.name 사용할 아이디
+	git config --global user.email 사용할 이메일
+	git clone https://github.com/KORIT-JKL/androg-portfolio-app.git
+ls 명령어 폴더 목록 보기 옵션 -a 숨겨진것도 전체보기
+./mvnw clean package -DskipTests - 권한이 없다고 에러가 뜬다면
+sudo chmod 700 mvnw - 권한을 바꿔줌
+
+docker ps -qa
+docker rm -f $(docker ps -qa)
+docker run -p 8080:8080 jungsunghyeon/androg
+docker build --build-arg JAR_FILE=target/*.jar -t jungsunghyeon/androg .
+docker login
+docker push jungsunghyeon/androg
+
+docker를 사용하지 않고 ec2 배포
+aws 가입 -> 보안그룹 생성 -> 인스턴스 만들기 -> 프리티어 적용 및 키페어 생성 -> 기존의 보안그룹 생성 적용
+-> ec2에 해당 jdk버전 설치 -> git 설치 (git에 올린 프로젝트를 불러오기 위해) -> git 설정 -> git clone ->maven파일까지 이동
+-> jar파일을 생성하기 위한 빌드 -> jar 파일 실행
+
+docker를 사용해서 ec2에 배포
+->인스턴스까지는 똑같음 -> docker 설치 -> docker(git), docker hub(git hub)로 이해하면 쉽다.
+-> docker를 적용하기 위한 프로젝트에 dockerfile 생성 -> git bash 혹은 IDE로 jar파일 생성 -> docker로 잘 실행되는지 확인(docker명령어를 쓰면 된다)
+-> docker에서 실행되는 것은 기존의 로컬환경이랑 똑같다 -> docker hub에 push -> ec2로 가서 docker 설치-> docker hub에 올라가 있는 이미지 파일을 ec2에서 pull
+-> docker에 올라가 있는 프로젝트 실행
