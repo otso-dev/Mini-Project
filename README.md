@@ -1,2 +1,3 @@
 # SocketProject
-java socket chatting project
+java socket chatting project  
+mini project
