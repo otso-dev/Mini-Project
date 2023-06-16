@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>미니프로젝트</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!-- JS -->
+    <script src="https://kit.fontawesome.com/ea16583f77.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+</head>
+<style>
+
+    .loginbtn {
+        display: flex;
+        flex-direction: row;
+        justify-content: right;
+        align-items: center;
+        margin-top: 10px;
+        margin-right: 20px;
+    }
+
+
+    .textbtn {
+        display: flex;
+        flex-direction: row;
+        justify-content: right;
+        align-items: center;
+        margin-top: 10px;
+        margin-right: 20px;
+    }
+
+    .box {
+        float: left;
+        margin-top: 30px;
+        width: 200px;
+        max-width: 40%;
+        height: 200px;
+        margin-left: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 3px 0px gray;
+    }
+
+    .name {
+        margin-left: 10px;
+        margin-top: 30px;
+    }
+
+    .tier {
+        margin-left: 10px;
+        margin-top: 20px;
+    }
+
+    .box:hover {
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+        transform: translateY(-10px);
+    }
+
+    .right {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .container-fluid {
+        color: #fff;
+    }
+</style>
+<script>
+    // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
+    function logout() {
+        $.removeCookie('mytoken');
+        alert('로그아웃!')
+        window.location.href = '/login'
+    }
+
+    function get_write_page() {
+        $.ajax({
+            type: "GET",
+            url: "/write",
+            data: {},
+            success: function (response) {
+                window.location.href = "write"
+            }
+        });
+
+    }
+
+</script>
+
+<body>
+<header class="header">
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container-fluid">
+            <h1 onclick="window.location.href='/'">듀오 구함</h1>
+            <div class="right">
+                {% if id %}
+                    <h2 style="color:white">{{ nickname }}님 환영합니다!</h2>
+                    <button class="btn btn-light" onclick="logout()">로그아웃</button>
+                {% else %}
+                    <button class="btn btn-light" onclick="window.location.href='/login'">로그인</button>
+                {% endif %}
+
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="textbtn">
+    <button onclick="get_write_page()" type="button" class="btn btn-outline-primary">글쓰기</button>
+</div>
+<div class="myboder">
+    <h3 style="text-align: center"> 글 목록</h3>
+</div>
+
+<tbody id="tbody-box">
+{% for border in borders %}
+    <div class="box" id="{{ border.id }}">
+        <div id="border-list" class="box-list" onclick=window.location.href="/board/{{ border.id }}">
+            <h1 style="text-align: center"><strong>듀오해듀오</strong></h1>
+            <div class="name">
+                <p1><strong>{{ border.duo_date }}</strong></p1>
+            </div>
+            <div class="tier">
+                <p1><strong>{{ border.tier }}</strong></p1>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</tbody>
+
+
+</body>
+
+</html>
