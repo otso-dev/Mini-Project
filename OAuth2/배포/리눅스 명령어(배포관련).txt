@@ -1,0 +1,250 @@
+jdk  sudo apt install openjdk-버전-jdk jdk 다운
+git  sudo apt install git git 다운
+	git config --global user.name 사용할 아이디
+	git config --global user.email 사용할 이메일
+	git clone https://github.com/KORIT-JKL/androg-portfolio-app.git
+ls 명령어 폴더 목록 보기 옵션 -a 숨겨진것도 전체보기
+./mvnw clean package -DskipTests - 권한이 없다고 에러가 뜬다면
+sudo chmod 700 mvnw - 권한을 바꿔줌
+
+docker ps -qa docker 실행중인 이미지 파일 확인
+docker rm -f $(docker ps -qa) 실행 멈춤
+docker run -p 8080:8080 jungsunghyeon/androg docker에 있는 프로젝트 실행
+docker build --build-arg JAR_FILE=target/*.jar -t jungsunghyeon/androg . docker에 있는 jar를 파일 실행
+docker login
+docker push jungsunghyeon/androg docker hub에 push
+
+docker를 사용하지 않고 ec2 배포
+aws 가입 -> 보안그룹 생성 -> 인스턴스 만들기 -> 프리티어 적용 및 키페어 생성 -> 기존의 보안그룹 생성 적용
+-> ec2에 해당 jdk버전 설치 -> git 설치 (git에 올린 프로젝트를 불러오기 위해) -> git 설정 -> git clone ->maven파일까지 이동
+-> jar파일을 생성하기 위한 빌드 -> jar 파일 실행
+
+docker를 사용해서 ec2에 배포
+->인스턴스까지는 똑같음 -> docker 설치 -> docker(git), docker hub(git hub)로 이해하면 쉽다.
+-> docker를 적용하기 위한 프로젝트에 dockerfile 생성 -> git bash 혹은 IDE로 jar파일 생성 -> docker로 잘 실행되는지 확인(docker명령어를 쓰면 된다)
+-> docker에서 실행되는 것은 기존의 로컬환경이랑 똑같다 -> docker hub에 push -> ec2로 가서 docker 설치-> docker hub에 올라가 있는 이미지 파일을 ec2에서 pull
+-> docker에 올라가 있는 프로젝트 실행
+
+
+
+
+
+배포
+
+ 
+
+서버를 재실행하기 위해 다시 배포하는 것을 "무중단 배포"라고 한다
+
+물리적 로드 밸런싱
+
+논리적 로드 밸런싱
+
+엔진엑스(로드 밸런싱 자동화)
+
+ 
+
+엔진엑스
+
+요청 IP는 엔진엑스의 탄력적 IP가 됨
+
+ 
+
+젠킨스
+
+CI/CD
+
+젠킨스한테 Build를 주면 서버한테 자동으로 Build를 줌
+
+ 
+
+STS4 -> Github -> 젠킨스 -> Docker 생성 -> DockerHub (Docker는 git이고, DockerHub는 Github 느낌. 그래서 push가 가능함) -> pull을 당기면 spring boot가 돌아감.
+
+ 
+
+블z루: 이전 버전
+
+그린: 새 버전
+
+ 
+
+여기까지 CI/CD.
+
+이 과정 자체를 데브 옵스라고 함.
+
+ 
+
+우리가 배포할 환경
+
+EC2 생성
+
+Ubuntu로 실행
+
+ 
+
+Spring boot는 build를 거침 -> .jar 파일 실행
+
+ 
+
+ 
+
+aws 로그인
+
+ 
+
+-> 서비스 클릭 -> 제일 밑에 컴퓨팅 -> EC2 -> 보안 그룹 -> 보안 그룹 생성 -> test로 이름, 설명 -> 인바인드 규칙(외부에서 들어올 수 있게끔 열어준다.) 규칙 추가 -> SSH(무조건 22번 포트, 가상의 PC에 접속하기 위해 SSH로 설정), 소스는 AnyWhere에 IP/4 0.0.0.0/0으로 다 열어준다.
+
+규칙 추가를 누르고 포트범위 8080에 또 다 열어줌
+
+-> 만들어주고 왼쪽에 인스턴스 -> 인스턴스 추가 -> Ubuntu에 20버전 -> 키페어 생성 -> 이름 test -> 기존 보안그룹 선택 -> test, defaut를 선택 -> EBS 볼륨은 최소 8기가이기 때문에 인스턴스는 최대 3개까지 무료로 만들 수 있음
+
+-> 생성하고 새로고침하면 상태검사가 완료가 되면 SSH에 접속 가능 -> 인스턴스 체크 -> 연결 -> 연결하기
+
+-> 뜨고 나면 명령어 입력할 차례
+
+-> sudo apt update(최신의 상태로 받아줌. git에서 patch와 같음.)
+
+** 파일을 보내려면 jdk와 git이 설치가 되어야 함 **
+-> sudo apt install openjdk-11-jdk(jdk11을 설치하는 방법)
+
+-> y 엔터
+
+-> sudo apt install git(설치 후 git --version해서 잘 설치 됐는지 확인)
+
+** git username, email **
+
+-> git config --global user.name iuejeong
+
+-> git config --global user.email dmlgus3585@naver.com 
+
+-> git config --global user.~~을 치면 내가 등록한 것들 확인이 가능함.
+
+-> 깃 프로젝트 레퍼지토리에 들어가서 클론을 받기 위해 코드 복사
+
+-> git clone https://github.com/KORIT-KLJK/CrowdFunding-portfolio.git
+
+ 
+GitHub - KORIT-KLJK/CrowdFunding-portfolio: [산대특] 백엔드+프론트엔드 크라우드 펀딩 포트폴리오
+
+[산대특] 백엔드+프론트엔드 크라우드 펀딩 포트폴리오. Contribute to KORIT-KLJK/CrowdFunding-portfolio development by creating an account on GitHub.
+
+github.com
+** ls 명령어 **
+
+폴더 목록 보기 옵션
+
+-a: 숨겨진 것도 전체보기
+
+-> ls -a
+
+-> ls
+
+-> cd를 눌러서 mvnw.cmd ~~ 나올 때까지 계속 하위 경로로 타고 들어감.(그 내용들이 maven build할 때 사용됨.)
+
+-> ./mvnw clean package -DskipTests (현재 빌드되어 있는 메이븐을 클린, 그 다음 다시 패키지, 테스트용은 삭제함.)
+
+-> 위에 것이 안 될 경우 sudo chmod 700 mvnw(권한을 바꿔줌.)
+
+-> 그리고 다시 빌드 클린 코드를 입력해준다.
+
+-> BUILD SUCCESS가 떠야 완료.
+
+-> ls
+
+-> target 폴더가 생김
+
+-> cd target
+
+-> ls 찍으면 jar가 생김
+
+-> java -jar jar파일 이름 입력
+
+ 
+
+인스턴스에서 체크하고 종료하면 "삭제"가 된다
+
+ 
+
+도커 설치
+
+ 
+
+구글에 docker 검색 -> docker desktop 들어가서 다운로드 -> 다 하고
+
+-> spring boot docker 검색 -> 공식 홈페이지에 들어감
+
+-> spring boot에 들어가서 해당 프로젝트 우클릭 -> Dockerfile 이름으로 파일을 만들어줌
+
+->
+
+FROM eclipse-temurin:17-jdk-alpine
+
+VOLUME /tmp
+
+ARG JAR_FILE
+
+COPY ${JAR_FILE} app.jar
+
+ENTRYPOINT ["java","-jar","/app.jar"]
+
+
+여기서 jdk 버전 11로 바꿔주기
+
+-> 해당 프로젝트에서 git bash 열어주기 -> ./mvnw clean package -DskipTests
+
+-> 안 되는 사람들은 Run as 안에 maven build 클릭
+
+ 
+
+-> docker hub 검색
+
+-> repository 생성
+
+-> docker build ~~~ 복사해서 제일 뒤에 본인 아이디/repository명으로 잡아준다.
+
+-> docker run -p 8080:8080 dmlgus3585/unisecond(spring boot docker에 있는 것임. 이것은 docker image를 실행시킨 것)
+
+-> 이러면 서버가 실행이 됨.
+
+여기까지 localhost
+
+-> git bash를 다시 열어서 dcker ps -qa(현재 실행 중인 컨테이너명이 뜬다)
+
+-> 종료를 위해 docker rm -f $(docker ps -qa)
+
+-> docker ps -qa(실행 중인 docker 컨테이너가 다 죽었는지 확인)
+
+-> docker push dmlgus3585/unisecond(docker hub에 push하는 것)
+
+-> docker login 명령어로 로그인 되어있는지 확인
+
+-> push하고 docker hub에 가서 잘 올라갔는지 확인   
+
+-> 다시 EC2 접속                                                                                                                                                                      -> 보안그룹에 back_server 이름으로 기존에 test에 만들었던 것 똑같이 만들어주기
+
+-> 인스턴스 들어가서 이번에는 개수 2개로 설정하고 아까 test에서 만들었던 것처럼 back_server로 만들어주기
+
+-> 탄력적 IP로 들어와서 2개 만들기
+
+-> 2개 다 연결하기
+
+-> 인스턴스 들어와서 인스턴스 2개 다 연결해서 console 열어주기
+
+-> https://everydayyy.tistory.com/121
+
+ 
+[Docker] EC2 Ubuntu서버에 docker 설치하기
+
+이번 포스팅은 AWS EC2에 ubuntu서버를 올린 상태에서, docker를 설치하는 과정을 담았다. 우리는 이전에 AWS EC2 인스턴스를 생성하여 나만의 서버를 호스팅해보았다. Reference: https://velog.io/@kyj311/AWS-EC2-
+
+everydayyy.tistory.com
+-> 1번 무시. 2번부터 하면 됨(둘 다 동시에 하기)               
+
+-> 다 하고 나서 1번 넣고 그 다음 다 끄고 재연결하기           
+
+-> docker pull 본인아이디/repository명
+
+-> docker run -p 8080:8080 본인아이디/repository명                                                                                                                                                                       
+
+-> 탄력적IP:8080 접속하면 서버가 켜져있는지 확인 가능
+
+=========== 여기까지 백엔드 서버 연결 =============                                                                                                                                                      
