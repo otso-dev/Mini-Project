@@ -19,7 +19,6 @@ function App() {
           <Routes>
             <Route path="/" Component={Home} />
             <Route path="/todo" Component={TodoList} />
-            <Route path="/weeklist" Component={WeekList} />
           </Routes>
         </AnimatePresence>
       </TodoContainer>
