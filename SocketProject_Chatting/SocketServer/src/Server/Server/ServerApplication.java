@@ -1,4 +1,5 @@
-package Server;
+package Server.Server;
+
 
 import java.io.IOException;
 import java.net.ConnectException;
