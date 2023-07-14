@@ -6,6 +6,7 @@ import { BiLike, BiHome, BiListUl, BiLogOut } from "react-icons/bi";
 import ListButton from "./ListButton/ListButton";
 import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const sidebar = (isOpen) => css`
   position: absolute;
@@ -92,6 +93,7 @@ const footer = css`
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const sidebarOpenClickHandler = () => {
     if (!isOpen) {
