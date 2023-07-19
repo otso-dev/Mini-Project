@@ -6,5 +6,5 @@
 ### [ToDoList](https://github.com/otso-dev/Mini-Project/tree/main/React_Todo_List)
 : 하루 일정 관리 웹
 
-### [Socket Chatting]
+### [Socket Chatting](https://github.com/otso-dev/Mini-Project/tree/main/SocketProject_Chatting)
 : javaSokcet과 JFrame을 이용한 chatting 프로그램
